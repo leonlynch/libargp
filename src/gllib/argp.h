@@ -19,6 +19,10 @@
 #ifndef _ARGP_H
 #define _ARGP_H
 
+#ifndef _GL_INLINE_HEADER_BEGIN
+#include <argp-config.h>
+#endif
+
 #include <stdio.h>
 #include <ctype.h>
 #include <getopt.h>
@@ -591,7 +595,7 @@ extern void *__argp_input (const struct argp *__restrict __argp,
 #  define __option_is_short _option_is_short
 #  define __option_is_end _option_is_end
 #ifndef _GL_INLINE_HEADER_BEGIN
- #error "Please include config.h first."
+ #error "Please include argp-config.h first."
 #endif
 _GL_INLINE_HEADER_BEGIN
 #  ifndef ARGP_EI
