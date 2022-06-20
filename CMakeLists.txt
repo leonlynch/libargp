@@ -67,6 +67,18 @@ if(CMAKE_BUILD_TYPE STREQUAL Debug OR CMAKE_BUILD_TYPE STREQUAL RelWithDebInfo)
 	string(APPEND libargp_CFLAGS " ${CMAKE_C_FLAGS_DEBUG}")
 endif()
 
+# Prevent autotools from reconfiguring due to git file timestamps
+# Only touch the files that would be updated by `autoreconf --force`
+execute_process(
+	COMMAND touch
+		${libargp_SOURCE_DIR}/configure
+		${libargp_SOURCE_DIR}/aclocal.m4
+		${libargp_SOURCE_DIR}/Makefile.in
+		${libargp_SOURCE_DIR}/config.h.in
+		${libargp_SOURCE_DIR}/gllib/Makefile.in
+		${libargp_SOURCE_DIR}/glm4/Makefile.in
+)
+
 # Configure libargp
 string(STRIP ${libargp_CFLAGS} libargp_CFLAGS)
 execute_process(
