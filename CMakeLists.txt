@@ -47,6 +47,17 @@ file(MAKE_DIRECTORY ${libargp_INCLUDE_DIR})
 file(MAKE_DIRECTORY ${libargp_LIB_DIR})
 file(COPY ${libargp_SOURCE_DIR}/gllib/argp.h ${PROJECT_SOURCE_DIR}/include/argp-config.h DESTINATION ${libargp_INCLUDE_DIR})
 
+# Configure compiler for AppleClang
+if(CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
+	# The GCC flavour of AppleClang is required to build libargp
+	set(libargp_CC_param "CC=/usr/bin/gcc")
+
+	# Also set the appropriate -arch flags
+	foreach(arch IN LISTS CMAKE_OSX_ARCHITECTURES)
+		string(APPEND libargp_CFLAGS " -arch ${arch}")
+	endforeach()
+endif()
+
 # Configure CFLAGS
 string(APPEND libargp_CFLAGS " ${CMAKE_C_FLAGS}")
 if(CMAKE_BUILD_TYPE STREQUAL Release OR CMAKE_BUILD_TYPE STREQUAL RelWithDebInfo)
@@ -59,7 +70,7 @@ endif()
 # Configure libargp
 string(STRIP ${libargp_CFLAGS} libargp_CFLAGS)
 execute_process(
-	COMMAND ${libargp_SHELL} ${libargp_SOURCE_DIR}/configure CFLAGS=${libargp_CFLAGS}
+	COMMAND ${libargp_SHELL} ${libargp_SOURCE_DIR}/configure ${libargp_CC_param} CFLAGS=${libargp_CFLAGS}
 	WORKING_DIRECTORY ${libargp_BINARY_DIR}
 	COMMAND_ECHO STDOUT
 )
