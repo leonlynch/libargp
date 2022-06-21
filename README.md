@@ -4,6 +4,7 @@ libargp (Gnulib)
 [![License: LGPL-2.1](https://img.shields.io/github/license/leonlynch/libargp)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html)<br/>
 [![Ubuntu build](https://github.com/leonlynch/libargp/actions/workflows/ubuntu-build.yaml/badge.svg)](https://github.com/leonlynch/libargp/actions/workflows/ubuntu-build.yaml)<br/>
 [![MacOS build](https://github.com/leonlynch/libargp/actions/workflows/macos-build.yaml/badge.svg)](https://github.com/leonlynch/libargp/actions/workflows/macos-build.yaml)<br/>
+[![Windows build](https://github.com/leonlynch/libargp/actions/workflows/windows-build.yaml/badge.svg)](https://github.com/leonlynch/libargp/actions/workflows/windows-build.yaml)<br/>
 
 This project provides various helpers for the extraction and use of libargp
 from [Gnulib](https://www.gnu.org/software/gnulib/). It also contains an
