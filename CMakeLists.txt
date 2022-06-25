@@ -31,12 +31,6 @@ endif()
 
 message(CHECK_START "Configuring libargp...")
 
-if(CMAKE_HOST_WIN32)
-	# The CMake execute_process() command doesn't use a shell and therefore a
-	# Bash-compatible shell must be invoked explicitly on a Windows host.
-	set(libargp_SHELL "sh")
-endif()
-
 # Configure source and output directories
 set(libargp_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 set(libargp_BINARY_DIR ${PROJECT_BINARY_DIR}/src)
@@ -56,6 +50,24 @@ if(CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
 	foreach(arch IN LISTS CMAKE_OSX_ARCHITECTURES)
 		string(APPEND libargp_CFLAGS " -arch ${arch}")
 	endforeach()
+endif()
+
+if(CMAKE_HOST_WIN32)
+	# The CMake execute_process() command doesn't use a shell and therefore a
+	# Bash-compatible shell must be invoked explicitly on a Windows host.
+	set(libargp_SHELL "sh")
+
+	# MSYS2 path mangling may confuse the configure script when it attempts to
+	# determine the source directory, so convert and specify it explicitly
+	# instead.
+	find_program(cygpath_FOUND cygpath)
+	if(cygpath_FOUND)
+		execute_process(
+			COMMAND cygpath -u ${PROJECT_SOURCE_DIR}/src
+			OUTPUT_VARIABLE libargp_srcdir_param
+		)
+		string(PREPEND libargp_srcdir_param "--srcdir=")
+	endif()
 endif()
 
 # Configure CFLAGS
@@ -82,7 +94,7 @@ execute_process(
 # Configure libargp
 string(STRIP ${libargp_CFLAGS} libargp_CFLAGS)
 execute_process(
-	COMMAND ${libargp_SHELL} ${libargp_SOURCE_DIR}/configure ${libargp_CC_param} CFLAGS=${libargp_CFLAGS}
+	COMMAND ${libargp_SHELL} ${libargp_SOURCE_DIR}/configure ${libargp_CC_param} CFLAGS=${libargp_CFLAGS} ${libargp_srcdir_param}
 	WORKING_DIRECTORY ${libargp_BINARY_DIR}
 	COMMAND_ECHO STDOUT
 )
