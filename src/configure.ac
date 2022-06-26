@@ -2,6 +2,7 @@
 AC_INIT([dummy], [0])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE
+AM_MAINTAINER_MODE([enable])
 
 AC_CONFIG_HEADERS([config.h])
 
