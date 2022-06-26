@@ -16,15 +16,21 @@ environment due to the many relevant platform tests, but won't regenerate the
 autoconf/automake build environment on hosts without autoconf/automake tools.
 
 The default branch represents the state of libargp that can be added to other
-projects while the `gnulib` branch represents the state of libargp after
+CMake projects while the `gnulib` branch represents the state of libargp after
 extraction from Gnulib but before any other patches have been applied.
 
 Usage
 -----
 
-TODO: describe helpers here!
+The `extract_libargp_lgpl_from_gnulib.sh` can be used while in the `gnulib`
+branch to clone the latest `gnulib`, extract the `libargp` build environment,
+and extract the `libargp` module itself under LGPL. The output directory can then be compared to the existing `src` directory to observe the changes since the last extraction. The output directory can then replace the existing `src` directory such that these changes reflect when committed to Git. Note that the intention is for this branch to represent the state of `libargp` exactly as it is extracted from `gnulib`. It can then be merged to the default branch and the latter can be used to track changes beyond `gnulib`.
 
-TODO: describe CMake use here!
+This CMake project can be added to CMake parent projects in various ways:
+* As a submodule using the CMake `add_subdirectory()` command
+* During the CMake configuration step using the CMake `FetchContent_Declare()`
+  and `FetchContent_MakeAvailable()` commands
+* During the CMake build step using the CMake `ExternalProject_Add()` command
 
 License
 -------
