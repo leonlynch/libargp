@@ -24,9 +24,13 @@ else()
 	set(LIBARGP_IS_TOP_LEVEL ${libargp_IS_TOP_LEVEL})
 endif()
 
-if(LIBARGP_IS_TOP_LEVEL AND CMAKE_C_COMPILER_ID STREQUAL "GNU")
-	string(APPEND CMAKE_C_FLAGS " -Wall")
-	string(APPEND CMAKE_C_FLAGS_DEBUG " -ggdb")
+# Configure compiler
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_EXTENSIONS OFF)
+if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+	add_compile_options(-Wall)
+	add_compile_options($<$<CONFIG:Debug>:-ggdb>)
+	add_compile_options($<$<CONFIG:RelWithDebInfo>:-ggdb>)
 endif()
 
 message(CHECK_START "Configuring libargp...")
