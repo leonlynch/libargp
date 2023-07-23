@@ -23,6 +23,7 @@ m4_pattern_allow([^gl_LTLIBOBJS$])dnl a variable
 gl_USE_SYSTEM_EXTENSIONS
 gl_PROG_AR_RANLIB
 
+gl_STDIO_H_EARLY
 LT_INIT([win32-dll])
 LT_LANG([C++])
 AM_CONDITIONAL([GL_COND_LIBTOOL], [true])
@@ -39,6 +40,7 @@ gl_m4_base='glm4'
   gl_COMMON
   gl_source_base='gllib'
   gl_source_base_prefix=
+  gl_ALIGNASOF
 changequote(,)dnl
 LTALLOCA=`echo "$ALLOCA" | sed -e 's/\.[^.]* /.lo /g;s/\.[^.]*$/.lo/'`
 changequote([, ])dnl
@@ -50,6 +52,9 @@ AC_SUBST([LTALLOCA])
   m4_ifdef([AM_XGETTEXT_OPTION],
     [AM_][XGETTEXT_OPTION([--flag=argp_error:2:c-format])
      AM_][XGETTEXT_OPTION([--flag=argp_failure:4:c-format])])
+  gl_ASSERT_H
+  gl_CONDITIONAL_HEADER([assert.h])
+  AC_PROG_MKDIR_P
   gl_DOUBLE_SLASH_ROOT
   gl_HEADER_ERRNO_H
   gl_CONDITIONAL_HEADER([errno.h])
@@ -99,6 +104,10 @@ AC_SUBST([LTALLOCA])
     AC_LIBOBJ([malloc])
   fi
   gl_STDLIB_MODULE_INDICATOR([malloc-posix])
+  AC_REQUIRE([AC_TYPE_MBSTATE_T])
+  gl_MBSTATE_T_BROKEN
+  gl_MUSL_LIBC
+  gl_WCHAR_MODULE_INDICATOR([mbszero])
   gl_FUNC_MEMCHR
   gl_CONDITIONAL([GL_COND_OBJ_MEMCHR], [test $REPLACE_MEMCHR = 1])
   AM_COND_IF([GL_COND_OBJ_MEMCHR], [
@@ -106,7 +115,8 @@ AC_SUBST([LTALLOCA])
   ])
   gl_STRING_MODULE_INDICATOR([memchr])
   gl_FUNC_MEMPCPY
-  gl_CONDITIONAL([GL_COND_OBJ_MEMPCPY], [test $HAVE_MEMPCPY = 0])
+  gl_CONDITIONAL([GL_COND_OBJ_MEMPCPY],
+                 [test $HAVE_MEMPCPY = 0 || test $REPLACE_MEMPCPY = 1])
   AM_COND_IF([GL_COND_OBJ_MEMPCPY], [
     gl_PREREQ_MEMPCPY
   ])
@@ -124,12 +134,7 @@ AC_SUBST([LTALLOCA])
                  [test $HAVE_SLEEP = 0 || test $REPLACE_SLEEP = 1])
   gl_UNISTD_MODULE_INDICATOR([sleep])
   gt_TYPE_SSIZE_T
-  gl_STDALIGN_H
-  gl_CONDITIONAL_HEADER([stdalign.h])
-  AC_PROG_MKDIR_P
-  gl_STDBOOL_H
-  gl_CONDITIONAL_HEADER([stdbool.h])
-  AC_PROG_MKDIR_P
+  gl_C_BOOL
   gl_STDDEF_H
   gl_STDDEF_H_REQUIRE_DEFAULTS
   gl_CONDITIONAL_HEADER([stddef.h])

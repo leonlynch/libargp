@@ -1,5 +1,5 @@
 /* Hierarchical argument parsing, layered over getopt.
-   Copyright (C) 1995-2022 Free Software Foundation, Inc.
+   Copyright (C) 1995-2023 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Written by Miles Bader <miles@gnu.ai.mit.edu>.
 
@@ -19,7 +19,8 @@
 #ifndef _ARGP_H
 #define _ARGP_H
 
-#ifndef _GL_INLINE_HEADER_BEGIN
+/* This file uses _GL_INLINE_HEADER_BEGIN, _GL_INLINE, _GL_ATTRIBUTE_FORMAT.  */
+#if !_LIBC && !_GL_CONFIG_H_INCLUDED
 #include <argp-config.h>
 #endif
 
@@ -406,7 +407,7 @@ struct argp_state
    unknown option is present, ARGP_ERR_UNKNOWN is returned; if some parser
    routine returned a non-zero value, it is returned; otherwise 0 is
    returned.  This function may also call exit unless the ARGP_NO_HELP flag
-   is set.  INPUT is a pointer to a value to be passed in to the parser.  */
+   is set.  INPUT is a pointer to a value to be passed to the parser.  */
 extern error_t argp_parse (const struct argp *__restrict __argp,
                            int /*argc*/, char **__restrict /*argv*/,
                            unsigned __flags, int *__restrict __arg_index,
@@ -594,9 +595,6 @@ extern void *__argp_input (const struct argp *__restrict __argp,
 #  define __argp_state_help argp_state_help
 #  define __option_is_short _option_is_short
 #  define __option_is_end _option_is_end
-#ifndef _GL_INLINE_HEADER_BEGIN
- #error "Please include argp-config.h first."
-#endif
 _GL_INLINE_HEADER_BEGIN
 #  ifndef ARGP_EI
 #   define ARGP_EI _GL_INLINE

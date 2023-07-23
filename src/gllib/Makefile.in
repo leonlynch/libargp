@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# Copyright (C) 2002-2022 Free Software Foundation, Inc.
+# Copyright (C) 2002-2023 Free Software Foundation, Inc.
 #
 # This file is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -134,6 +134,8 @@ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/glm4/00gnulib.m4 \
 	$(top_srcdir)/glm4/absolute-header.m4 \
 	$(top_srcdir)/glm4/alloca.m4 $(top_srcdir)/glm4/argp.m4 \
+	$(top_srcdir)/glm4/assert_h.m4 $(top_srcdir)/glm4/c-bool.m4 \
+	$(top_srcdir)/glm4/codeset.m4 \
 	$(top_srcdir)/glm4/double-slash-root.m4 \
 	$(top_srcdir)/glm4/errno_h.m4 $(top_srcdir)/glm4/exponentd.m4 \
 	$(top_srcdir)/glm4/extensions.m4 \
@@ -144,16 +146,20 @@ am__aclocal_m4_deps = $(top_srcdir)/glm4/00gnulib.m4 \
 	$(top_srcdir)/glm4/include_next.m4 \
 	$(top_srcdir)/glm4/intmax_t.m4 $(top_srcdir)/glm4/inttypes.m4 \
 	$(top_srcdir)/glm4/inttypes_h.m4 $(top_srcdir)/glm4/libtool.m4 \
-	$(top_srcdir)/glm4/limits-h.m4 $(top_srcdir)/glm4/ltoptions.m4 \
-	$(top_srcdir)/glm4/ltsugar.m4 $(top_srcdir)/glm4/ltversion.m4 \
+	$(top_srcdir)/glm4/limits-h.m4 $(top_srcdir)/glm4/locale-fr.m4 \
+	$(top_srcdir)/glm4/locale-ja.m4 \
+	$(top_srcdir)/glm4/locale-zh.m4 \
+	$(top_srcdir)/glm4/ltoptions.m4 $(top_srcdir)/glm4/ltsugar.m4 \
+	$(top_srcdir)/glm4/ltversion.m4 \
 	$(top_srcdir)/glm4/lt~obsolete.m4 $(top_srcdir)/glm4/malloc.m4 \
+	$(top_srcdir)/glm4/mbrtowc.m4 $(top_srcdir)/glm4/mbstate_t.m4 \
 	$(top_srcdir)/glm4/memchr.m4 $(top_srcdir)/glm4/mempcpy.m4 \
 	$(top_srcdir)/glm4/mmap-anon.m4 \
-	$(top_srcdir)/glm4/multiarch.m4 $(top_srcdir)/glm4/nocrash.m4 \
-	$(top_srcdir)/glm4/off_t.m4 $(top_srcdir)/glm4/printf.m4 \
-	$(top_srcdir)/glm4/rawmemchr.m4 $(top_srcdir)/glm4/size_max.m4 \
-	$(top_srcdir)/glm4/sleep.m4 $(top_srcdir)/glm4/ssize_t.m4 \
-	$(top_srcdir)/glm4/stdalign.m4 $(top_srcdir)/glm4/stdbool.m4 \
+	$(top_srcdir)/glm4/multiarch.m4 $(top_srcdir)/glm4/musl.m4 \
+	$(top_srcdir)/glm4/nocrash.m4 $(top_srcdir)/glm4/off_t.m4 \
+	$(top_srcdir)/glm4/printf.m4 $(top_srcdir)/glm4/rawmemchr.m4 \
+	$(top_srcdir)/glm4/size_max.m4 $(top_srcdir)/glm4/sleep.m4 \
+	$(top_srcdir)/glm4/ssize_t.m4 $(top_srcdir)/glm4/stdalign.m4 \
 	$(top_srcdir)/glm4/stddef_h.m4 $(top_srcdir)/glm4/stdint.m4 \
 	$(top_srcdir)/glm4/stdint_h.m4 $(top_srcdir)/glm4/stdio_h.m4 \
 	$(top_srcdir)/glm4/stdlib_h.m4 $(top_srcdir)/glm4/strcase.m4 \
@@ -184,10 +190,10 @@ am__libargp_la_SOURCES_DIST = argp.h argp-ba.c argp-eexst.c \
 	argp-fmtstream.c argp-fmtstream.h argp-fs-xinl.c argp-help.c \
 	argp-namefrob.h argp-parse.c argp-pin.c argp-pv.c argp-pvh.c \
 	argp-xinl.c basename-lgpl.c float.c itold.c free.c getopt.c \
-	getopt1.c gettext.h memchr.c mempcpy.c rawmemchr.c size_max.h \
-	sleep.c stdio-read.c stdio-write.c strcasecmp.c strncasecmp.c \
-	strchrnul.c strerror.c strerror-override.c strndup.c strnlen.c \
-	unistd.c xsize.h xsize.c
+	getopt1.c gettext.h mbszero.c memchr.c mempcpy.c rawmemchr.c \
+	size_max.h sleep.c stdio-read.c stdio-write.c strcasecmp.c \
+	strncasecmp.c strchrnul.c strerror.c strerror-override.c \
+	strndup.c strnlen.c unistd.c xsize.h xsize.c
 @GL_COND_OBJ_FLOAT_TRUE@am__objects_1 = float.lo
 @GL_COND_OBJ_ITOLD_TRUE@am__objects_2 = itold.lo
 @GL_COND_OBJ_FREE_TRUE@am__objects_3 = free.lo
@@ -210,7 +216,7 @@ am_libargp_la_OBJECTS = argp-ba.lo argp-eexst.lo argp-fmtstream.lo \
 	argp-fs-xinl.lo argp-help.lo argp-parse.lo argp-pin.lo \
 	argp-pv.lo argp-pvh.lo argp-xinl.lo basename-lgpl.lo \
 	$(am__objects_1) $(am__objects_2) $(am__objects_3) \
-	$(am__objects_4) $(am__objects_5) $(am__objects_6) \
+	$(am__objects_4) mbszero.lo $(am__objects_5) $(am__objects_6) \
 	$(am__objects_7) $(am__objects_8) $(am__objects_9) \
 	$(am__objects_10) $(am__objects_11) $(am__objects_12) \
 	$(am__objects_13) $(am__objects_14) $(am__objects_15) \
@@ -247,16 +253,17 @@ am__depfiles_remade = ./$(DEPDIR)/alloca.Plo ./$(DEPDIR)/argp-ba.Plo \
 	./$(DEPDIR)/basename-lgpl.Plo ./$(DEPDIR)/float.Plo \
 	./$(DEPDIR)/free.Plo ./$(DEPDIR)/getopt.Plo \
 	./$(DEPDIR)/getopt1.Plo ./$(DEPDIR)/itold.Plo \
-	./$(DEPDIR)/malloc.Plo ./$(DEPDIR)/memchr.Plo \
-	./$(DEPDIR)/mempcpy.Plo ./$(DEPDIR)/printf-args.Plo \
-	./$(DEPDIR)/printf-parse.Plo ./$(DEPDIR)/rawmemchr.Plo \
-	./$(DEPDIR)/sleep.Plo ./$(DEPDIR)/stdio-read.Plo \
-	./$(DEPDIR)/stdio-write.Plo ./$(DEPDIR)/strcasecmp.Plo \
-	./$(DEPDIR)/strchrnul.Plo ./$(DEPDIR)/strerror-override.Plo \
-	./$(DEPDIR)/strerror.Plo ./$(DEPDIR)/strncasecmp.Plo \
-	./$(DEPDIR)/strndup.Plo ./$(DEPDIR)/strnlen.Plo \
-	./$(DEPDIR)/unistd.Plo ./$(DEPDIR)/vasnprintf.Plo \
-	./$(DEPDIR)/vsnprintf.Plo ./$(DEPDIR)/xsize.Plo
+	./$(DEPDIR)/malloc.Plo ./$(DEPDIR)/mbszero.Plo \
+	./$(DEPDIR)/memchr.Plo ./$(DEPDIR)/mempcpy.Plo \
+	./$(DEPDIR)/printf-args.Plo ./$(DEPDIR)/printf-parse.Plo \
+	./$(DEPDIR)/rawmemchr.Plo ./$(DEPDIR)/sleep.Plo \
+	./$(DEPDIR)/stdio-read.Plo ./$(DEPDIR)/stdio-write.Plo \
+	./$(DEPDIR)/strcasecmp.Plo ./$(DEPDIR)/strchrnul.Plo \
+	./$(DEPDIR)/strerror-override.Plo ./$(DEPDIR)/strerror.Plo \
+	./$(DEPDIR)/strncasecmp.Plo ./$(DEPDIR)/strndup.Plo \
+	./$(DEPDIR)/strnlen.Plo ./$(DEPDIR)/unistd.Plo \
+	./$(DEPDIR)/vasnprintf.Plo ./$(DEPDIR)/vsnprintf.Plo \
+	./$(DEPDIR)/xsize.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -356,6 +363,7 @@ APPLE_UNIVERSAL_BUILD = @APPLE_UNIVERSAL_BUILD@
 AR = @AR@
 ARFLAGS = @ARFLAGS@
 AS = @AS@
+ASSERT_H = @ASSERT_H@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
@@ -472,6 +480,7 @@ GL_GNULIB_GETOPT_POSIX = @GL_GNULIB_GETOPT_POSIX@
 GL_GNULIB_GETPAGESIZE = @GL_GNULIB_GETPAGESIZE@
 GL_GNULIB_GETPASS = @GL_GNULIB_GETPASS@
 GL_GNULIB_GETPASS_GNU = @GL_GNULIB_GETPASS_GNU@
+GL_GNULIB_GETPROGNAME = @GL_GNULIB_GETPROGNAME@
 GL_GNULIB_GETSUBOPT = @GL_GNULIB_GETSUBOPT@
 GL_GNULIB_GETUSERSHELL = @GL_GNULIB_GETUSERSHELL@
 GL_GNULIB_GRANTPT = @GL_GNULIB_GRANTPT@
@@ -504,6 +513,8 @@ GL_GNULIB_MBSSEP = @GL_GNULIB_MBSSEP@
 GL_GNULIB_MBSSPN = @GL_GNULIB_MBSSPN@
 GL_GNULIB_MBSSTR = @GL_GNULIB_MBSSTR@
 GL_GNULIB_MBSTOK_R = @GL_GNULIB_MBSTOK_R@
+GL_GNULIB_MBSTOWCS = @GL_GNULIB_MBSTOWCS@
+GL_GNULIB_MBSZERO = @GL_GNULIB_MBSZERO@
 GL_GNULIB_MBTOWC = @GL_GNULIB_MBTOWC@
 GL_GNULIB_MDA_ACCESS = @GL_GNULIB_MDA_ACCESS@
 GL_GNULIB_MDA_CHDIR = @GL_GNULIB_MDA_CHDIR@
@@ -544,6 +555,7 @@ GL_GNULIB_MEMCHR = @GL_GNULIB_MEMCHR@
 GL_GNULIB_MEMMEM = @GL_GNULIB_MEMMEM@
 GL_GNULIB_MEMPCPY = @GL_GNULIB_MEMPCPY@
 GL_GNULIB_MEMRCHR = @GL_GNULIB_MEMRCHR@
+GL_GNULIB_MEMSET_EXPLICIT = @GL_GNULIB_MEMSET_EXPLICIT@
 GL_GNULIB_MKDTEMP = @GL_GNULIB_MKDTEMP@
 GL_GNULIB_MKOSTEMP = @GL_GNULIB_MKOSTEMP@
 GL_GNULIB_MKOSTEMPS = @GL_GNULIB_MKOSTEMPS@
@@ -712,12 +724,15 @@ HAVE_DECL_GETLOGIN = @HAVE_DECL_GETLOGIN@
 HAVE_DECL_GETLOGIN_R = @HAVE_DECL_GETLOGIN_R@
 HAVE_DECL_GETPAGESIZE = @HAVE_DECL_GETPAGESIZE@
 HAVE_DECL_GETUSERSHELL = @HAVE_DECL_GETUSERSHELL@
+HAVE_DECL_GETW = @HAVE_DECL_GETW@
 HAVE_DECL_IMAXABS = @HAVE_DECL_IMAXABS@
 HAVE_DECL_IMAXDIV = @HAVE_DECL_IMAXDIV@
 HAVE_DECL_INITSTATE = @HAVE_DECL_INITSTATE@
 HAVE_DECL_MEMMEM = @HAVE_DECL_MEMMEM@
 HAVE_DECL_MEMRCHR = @HAVE_DECL_MEMRCHR@
 HAVE_DECL_OBSTACK_PRINTF = @HAVE_DECL_OBSTACK_PRINTF@
+HAVE_DECL_PROGRAM_INVOCATION_NAME = @HAVE_DECL_PROGRAM_INVOCATION_NAME@
+HAVE_DECL_PUTW = @HAVE_DECL_PUTW@
 HAVE_DECL_SETENV = @HAVE_DECL_SETENV@
 HAVE_DECL_SETHOSTNAME = @HAVE_DECL_SETHOSTNAME@
 HAVE_DECL_SETSTATE = @HAVE_DECL_SETSTATE@
@@ -763,9 +778,12 @@ HAVE_GETLOGIN = @HAVE_GETLOGIN@
 HAVE_GETOPT_H = @HAVE_GETOPT_H@
 HAVE_GETPAGESIZE = @HAVE_GETPAGESIZE@
 HAVE_GETPASS = @HAVE_GETPASS@
+HAVE_GETPROGNAME = @HAVE_GETPROGNAME@
 HAVE_GETSUBOPT = @HAVE_GETSUBOPT@
 HAVE_GRANTPT = @HAVE_GRANTPT@
 HAVE_GROUP_MEMBER = @HAVE_GROUP_MEMBER@
+HAVE_IMAXABS = @HAVE_IMAXABS@
+HAVE_IMAXDIV = @HAVE_IMAXDIV@
 HAVE_IMAXDIV_T = @HAVE_IMAXDIV_T@
 HAVE_INITSTATE = @HAVE_INITSTATE@
 HAVE_INTTYPES_H = @HAVE_INTTYPES_H@
@@ -781,6 +799,7 @@ HAVE_MBSNRTOWCS = @HAVE_MBSNRTOWCS@
 HAVE_MBSRTOWCS = @HAVE_MBSRTOWCS@
 HAVE_MBTOWC = @HAVE_MBTOWC@
 HAVE_MEMPCPY = @HAVE_MEMPCPY@
+HAVE_MEMSET_EXPLICIT = @HAVE_MEMSET_EXPLICIT@
 HAVE_MKDTEMP = @HAVE_MKDTEMP@
 HAVE_MKOSTEMP = @HAVE_MKOSTEMP@
 HAVE_MKOSTEMPS = @HAVE_MKOSTEMPS@
@@ -888,7 +907,6 @@ HAVE_WMEMCPY = @HAVE_WMEMCPY@
 HAVE_WMEMMOVE = @HAVE_WMEMMOVE@
 HAVE_WMEMPCPY = @HAVE_WMEMPCPY@
 HAVE_WMEMSET = @HAVE_WMEMSET@
-HAVE__BOOL = @HAVE__BOOL@
 HAVE__EXIT = @HAVE__EXIT@
 INCLUDE_NEXT = @INCLUDE_NEXT@
 INCLUDE_NEXT_AS_FIRST_DIRECTIVE = @INCLUDE_NEXT_AS_FIRST_DIRECTIVE@
@@ -899,6 +917,10 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 INT32_MAX_LT_INTMAX_MAX = @INT32_MAX_LT_INTMAX_MAX@
 INT64_MAX_EQ_LONG_MAX = @INT64_MAX_EQ_LONG_MAX@
+LC_COLLATE_IMPLEMENTED = @LC_COLLATE_IMPLEMENTED@
+LC_MONETARY_IMPLEMENTED = @LC_MONETARY_IMPLEMENTED@
+LC_NUMERIC_IMPLEMENTED = @LC_NUMERIC_IMPLEMENTED@
+LC_TIME_IMPLEMENTED = @LC_TIME_IMPLEMENTED@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBINTL = @LIBINTL@
@@ -908,6 +930,9 @@ LIBTOOL = @LIBTOOL@
 LIMITS_H = @LIMITS_H@
 LIPO = @LIPO@
 LN_S = @LN_S@
+LOCALE_FR_UTF8 = @LOCALE_FR_UTF8@
+LOCALE_JA = @LOCALE_JA@
+LOCALE_ZH_CN = @LOCALE_ZH_CN@
 LTALLOCA = @LTALLOCA@
 LTLIBINTL = @LTLIBINTL@
 LTLIBOBJS = @LTLIBOBJS@
@@ -916,6 +941,8 @@ MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
+NEXT_ASSERT_H = @NEXT_ASSERT_H@
+NEXT_AS_FIRST_DIRECTIVE_ASSERT_H = @NEXT_AS_FIRST_DIRECTIVE_ASSERT_H@
 NEXT_AS_FIRST_DIRECTIVE_ERRNO_H = @NEXT_AS_FIRST_DIRECTIVE_ERRNO_H@
 NEXT_AS_FIRST_DIRECTIVE_FLOAT_H = @NEXT_AS_FIRST_DIRECTIVE_FLOAT_H@
 NEXT_AS_FIRST_DIRECTIVE_GETOPT_H = @NEXT_AS_FIRST_DIRECTIVE_GETOPT_H@
@@ -977,6 +1004,7 @@ REPLACE_COPY_FILE_RANGE = @REPLACE_COPY_FILE_RANGE@
 REPLACE_DPRINTF = @REPLACE_DPRINTF@
 REPLACE_DUP = @REPLACE_DUP@
 REPLACE_DUP2 = @REPLACE_DUP2@
+REPLACE_DUP3 = @REPLACE_DUP3@
 REPLACE_EXECL = @REPLACE_EXECL@
 REPLACE_EXECLE = @REPLACE_EXECLE@
 REPLACE_EXECLP = @REPLACE_EXECLP@
@@ -987,6 +1015,7 @@ REPLACE_EXECVPE = @REPLACE_EXECVPE@
 REPLACE_FACCESSAT = @REPLACE_FACCESSAT@
 REPLACE_FCHOWNAT = @REPLACE_FCHOWNAT@
 REPLACE_FCLOSE = @REPLACE_FCLOSE@
+REPLACE_FDATASYNC = @REPLACE_FDATASYNC@
 REPLACE_FDOPEN = @REPLACE_FDOPEN@
 REPLACE_FFLUSH = @REPLACE_FFLUSH@
 REPLACE_FFSLL = @REPLACE_FFSLL@
@@ -1005,12 +1034,18 @@ REPLACE_GETCWD = @REPLACE_GETCWD@
 REPLACE_GETDELIM = @REPLACE_GETDELIM@
 REPLACE_GETDOMAINNAME = @REPLACE_GETDOMAINNAME@
 REPLACE_GETDTABLESIZE = @REPLACE_GETDTABLESIZE@
+REPLACE_GETENTROPY = @REPLACE_GETENTROPY@
 REPLACE_GETGROUPS = @REPLACE_GETGROUPS@
 REPLACE_GETLINE = @REPLACE_GETLINE@
+REPLACE_GETLOADAVG = @REPLACE_GETLOADAVG@
 REPLACE_GETLOGIN_R = @REPLACE_GETLOGIN_R@
 REPLACE_GETPAGESIZE = @REPLACE_GETPAGESIZE@
 REPLACE_GETPASS = @REPLACE_GETPASS@
 REPLACE_GETPASS_FOR_GETPASS_GNU = @REPLACE_GETPASS_FOR_GETPASS_GNU@
+REPLACE_GETPROGNAME = @REPLACE_GETPROGNAME@
+REPLACE_GETSUBOPT = @REPLACE_GETSUBOPT@
+REPLACE_IMAXABS = @REPLACE_IMAXABS@
+REPLACE_IMAXDIV = @REPLACE_IMAXDIV@
 REPLACE_INITSTATE = @REPLACE_INITSTATE@
 REPLACE_ISATTY = @REPLACE_ISATTY@
 REPLACE_ITOLD = @REPLACE_ITOLD@
@@ -1026,15 +1061,22 @@ REPLACE_MBSINIT = @REPLACE_MBSINIT@
 REPLACE_MBSNRTOWCS = @REPLACE_MBSNRTOWCS@
 REPLACE_MBSRTOWCS = @REPLACE_MBSRTOWCS@
 REPLACE_MBSTATE_T = @REPLACE_MBSTATE_T@
+REPLACE_MBSTOWCS = @REPLACE_MBSTOWCS@
 REPLACE_MBTOWC = @REPLACE_MBTOWC@
+REPLACE_MB_CUR_MAX = @REPLACE_MB_CUR_MAX@
 REPLACE_MEMCHR = @REPLACE_MEMCHR@
 REPLACE_MEMMEM = @REPLACE_MEMMEM@
+REPLACE_MEMPCPY = @REPLACE_MEMPCPY@
+REPLACE_MKOSTEMP = @REPLACE_MKOSTEMP@
+REPLACE_MKOSTEMPS = @REPLACE_MKOSTEMPS@
 REPLACE_MKSTEMP = @REPLACE_MKSTEMP@
 REPLACE_NULL = @REPLACE_NULL@
 REPLACE_OBSTACK_PRINTF = @REPLACE_OBSTACK_PRINTF@
 REPLACE_PERROR = @REPLACE_PERROR@
+REPLACE_PIPE2 = @REPLACE_PIPE2@
 REPLACE_POPEN = @REPLACE_POPEN@
 REPLACE_POSIX_MEMALIGN = @REPLACE_POSIX_MEMALIGN@
+REPLACE_POSIX_OPENPT = @REPLACE_POSIX_OPENPT@
 REPLACE_PREAD = @REPLACE_PREAD@
 REPLACE_PRINTF = @REPLACE_PRINTF@
 REPLACE_PTSNAME = @REPLACE_PTSNAME@
@@ -1056,12 +1098,14 @@ REPLACE_RENAME = @REPLACE_RENAME@
 REPLACE_RENAMEAT = @REPLACE_RENAMEAT@
 REPLACE_RMDIR = @REPLACE_RMDIR@
 REPLACE_SETENV = @REPLACE_SETENV@
+REPLACE_SETHOSTNAME = @REPLACE_SETHOSTNAME@
 REPLACE_SETSTATE = @REPLACE_SETSTATE@
 REPLACE_SLEEP = @REPLACE_SLEEP@
 REPLACE_SNPRINTF = @REPLACE_SNPRINTF@
 REPLACE_SPRINTF = @REPLACE_SPRINTF@
 REPLACE_STDIO_READ_FUNCS = @REPLACE_STDIO_READ_FUNCS@
 REPLACE_STDIO_WRITE_FUNCS = @REPLACE_STDIO_WRITE_FUNCS@
+REPLACE_STPCPY = @REPLACE_STPCPY@
 REPLACE_STPNCPY = @REPLACE_STPNCPY@
 REPLACE_STRCASESTR = @REPLACE_STRCASESTR@
 REPLACE_STRCHRNUL = @REPLACE_STRCHRNUL@
@@ -1099,22 +1143,26 @@ REPLACE_VPRINTF = @REPLACE_VPRINTF@
 REPLACE_VSNPRINTF = @REPLACE_VSNPRINTF@
 REPLACE_VSPRINTF = @REPLACE_VSPRINTF@
 REPLACE_WCRTOMB = @REPLACE_WCRTOMB@
+REPLACE_WCSCMP = @REPLACE_WCSCMP@
 REPLACE_WCSFTIME = @REPLACE_WCSFTIME@
+REPLACE_WCSNCMP = @REPLACE_WCSNCMP@
 REPLACE_WCSNRTOMBS = @REPLACE_WCSNRTOMBS@
 REPLACE_WCSRTOMBS = @REPLACE_WCSRTOMBS@
+REPLACE_WCSSTR = @REPLACE_WCSSTR@
 REPLACE_WCSTOK = @REPLACE_WCSTOK@
 REPLACE_WCSWIDTH = @REPLACE_WCSWIDTH@
 REPLACE_WCTOB = @REPLACE_WCTOB@
 REPLACE_WCTOMB = @REPLACE_WCTOMB@
 REPLACE_WCWIDTH = @REPLACE_WCWIDTH@
+REPLACE_WMEMCMP = @REPLACE_WMEMCMP@
+REPLACE_WMEMPCPY = @REPLACE_WMEMPCPY@
 REPLACE_WRITE = @REPLACE_WRITE@
+REPLACE__EXIT = @REPLACE__EXIT@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 SIG_ATOMIC_T_SUFFIX = @SIG_ATOMIC_T_SUFFIX@
 SIZE_T_SUFFIX = @SIZE_T_SUFFIX@
-STDALIGN_H = @STDALIGN_H@
-STDBOOL_H = @STDBOOL_H@
 STDDEF_H = @STDDEF_H@
 STDINT_H = @STDINT_H@
 STRIP = @STRIP@
@@ -1192,31 +1240,33 @@ SUBDIRS =
 noinst_HEADERS = 
 noinst_LIBRARIES = 
 noinst_LTLIBRARIES = libargp.la
-EXTRA_DIST = alloca.c alloca.in.h attribute.h basename-lgpl.h \
-	errno.in.h filename.h float.in.h getopt-cdefs.in.h \
-	getopt-core.h getopt-ext.h getopt-pfx-core.h getopt-pfx-ext.h \
-	getopt.in.h getopt_int.h intprops.h inttypes.in.h limits.in.h \
-	malloc.c malloc.c memchr.valgrind rawmemchr.valgrind \
-	_Noreturn.h arg-nonnull.h c++defs.h warn-on-use.h \
-	stdalign.in.h stdbool.in.h stddef.in.h stdint.in.h stdio.in.h \
+EXTRA_DIST = alloca.c alloca.in.h assert.in.h verify.h attribute.h \
+	basename-lgpl.h errno.in.h filename.h float.in.h \
+	getopt-cdefs.in.h getopt-core.h getopt-ext.h getopt-pfx-core.h \
+	getopt-pfx-ext.h getopt.in.h getopt_int.h intprops-internal.h \
+	intprops.h inttypes.in.h limits.in.h malloc.c malloc.c \
+	memchr.valgrind rawmemchr.valgrind _Noreturn.h arg-nonnull.h \
+	c++defs.h warn-on-use.h stddef.in.h stdint.in.h stdio.in.h \
 	stdlib.in.h strchrnul.valgrind strerror-override.h string.in.h \
 	strings.in.h sys_types.in.h sysexits.in.h unistd.in.h \
 	asnprintf.c float+.h printf-args.c printf-args.h \
 	printf-parse.c printf-parse.h vasnprintf.c vasnprintf.h \
-	verify.h vsnprintf.c wchar.in.h xalloc-oversized.h
-BUILT_SOURCES = $(ALLOCA_H) $(ERRNO_H) $(FLOAT_H) $(GETOPT_H) \
-	$(GETOPT_CDEFS_H) inttypes.h $(LIMITS_H) $(STDALIGN_H) \
-	$(STDBOOL_H) $(STDDEF_H) $(STDINT_H) stdio.h stdlib.h string.h \
-	strings.h sys/types.h $(SYSEXITS_H) unistd.h wchar.h
+	vsnprintf.c wchar.in.h xalloc-oversized.h
+BUILT_SOURCES = $(ALLOCA_H) $(ASSERT_H) $(ERRNO_H) $(FLOAT_H) \
+	$(GETOPT_H) $(GETOPT_CDEFS_H) inttypes.h $(LIMITS_H) \
+	$(STDDEF_H) $(STDINT_H) stdio.h stdlib.h string.h strings.h \
+	sys/types.h $(SYSEXITS_H) unistd.h wchar.h
 SUFFIXES = 
-MOSTLYCLEANFILES = core *.stackdump alloca.h alloca.h-t errno.h \
-	errno.h-t float.h float.h-t getopt.h getopt.h-t getopt-cdefs.h \
-	getopt-cdefs.h-t inttypes.h inttypes.h-t limits.h limits.h-t \
-	stdalign.h stdalign.h-t stdbool.h stdbool.h-t stddef.h \
-	stddef.h-t stdint.h stdint.h-t stdio.h stdio.h-t stdlib.h \
-	stdlib.h-t string.h string.h-t strings.h strings.h-t \
-	sys/types.h sys/types.h-t sysexits.h sysexits.h-t unistd.h \
-	unistd.h-t wchar.h wchar.h-t
+MOSTLYCLEANFILES = core *.stackdump alloca.h alloca.h-t assert.h \
+	assert.h-t errno.h errno.h-t float.h float.h-t getopt.h \
+	getopt.h-t getopt-cdefs.h getopt-cdefs.h-t inttypes.h \
+	inttypes.h-t limits.h limits.h-t stddef.h stddef.h-t stdint.h \
+	stdint.h-t stdio.h stdio.h-t1 stdio.h-t2 stdio.h-t3 stdlib.h \
+	stdlib.h-t1 stdlib.h-t2 stdlib.h-t3 string.h string.h-t1 \
+	string.h-t2 strings.h strings.h-t sys/types.h sys/types.h-t \
+	sysexits.h sysexits.h-t unistd.h unistd.h-t1 unistd.h-t2 \
+	unistd.h-t3 unistd.h-t4 wchar.h wchar.h-t1 wchar.h-t2 \
+	wchar.h-t3
 MOSTLYCLEANDIRS = 
 CLEANFILES = 
 DISTCLEANFILES = 
@@ -1228,12 +1278,12 @@ libargp_la_SOURCES = argp.h argp-ba.c argp-eexst.c argp-fmtstream.c \
 	argp-fmtstream.h argp-fs-xinl.c argp-help.c argp-namefrob.h \
 	argp-parse.c argp-pin.c argp-pv.c argp-pvh.c argp-xinl.c \
 	basename-lgpl.c $(am__append_1) $(am__append_2) \
-	$(am__append_3) $(am__append_4) gettext.h $(am__append_5) \
-	$(am__append_6) $(am__append_7) size_max.h $(am__append_8) \
-	$(am__append_9) $(am__append_10) $(am__append_11) \
-	$(am__append_12) $(am__append_13) $(am__append_14) \
-	$(am__append_15) $(am__append_16) $(am__append_17) unistd.c \
-	xsize.h xsize.c
+	$(am__append_3) $(am__append_4) gettext.h mbszero.c \
+	$(am__append_5) $(am__append_6) $(am__append_7) size_max.h \
+	$(am__append_8) $(am__append_9) $(am__append_10) \
+	$(am__append_11) $(am__append_12) $(am__append_13) \
+	$(am__append_14) $(am__append_15) $(am__append_16) \
+	$(am__append_17) unistd.c xsize.h xsize.c
 libargp_la_LIBADD = $(gl_LTLIBOBJS) @LTALLOCA@
 libargp_la_DEPENDENCIES = $(gl_LTLIBOBJS) @LTALLOCA@
 EXTRA_libargp_la_SOURCES = alloca.c malloc.c malloc.c asnprintf.c \
@@ -1356,6 +1406,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/getopt1.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/itold.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/malloc.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mbszero.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memchr.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mempcpy.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/printf-args.Plo@am__quote@ # am--include-marker
@@ -1633,6 +1684,7 @@ distclean: distclean-recursive
 	-rm -f ./$(DEPDIR)/getopt1.Plo
 	-rm -f ./$(DEPDIR)/itold.Plo
 	-rm -f ./$(DEPDIR)/malloc.Plo
+	-rm -f ./$(DEPDIR)/mbszero.Plo
 	-rm -f ./$(DEPDIR)/memchr.Plo
 	-rm -f ./$(DEPDIR)/mempcpy.Plo
 	-rm -f ./$(DEPDIR)/printf-args.Plo
@@ -1716,6 +1768,7 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f ./$(DEPDIR)/getopt1.Plo
 	-rm -f ./$(DEPDIR)/itold.Plo
 	-rm -f ./$(DEPDIR)/malloc.Plo
+	-rm -f ./$(DEPDIR)/mbszero.Plo
 	-rm -f ./$(DEPDIR)/memchr.Plo
 	-rm -f ./$(DEPDIR)/mempcpy.Plo
 	-rm -f ./$(DEPDIR)/printf-args.Plo
@@ -1785,6 +1838,25 @@ uninstall-am:
 @GL_GENERATE_ALLOCA_H_TRUE@	$(AM_V_at)mv $@-t $@
 @GL_GENERATE_ALLOCA_H_FALSE@alloca.h: $(top_builddir)/config.status
 @GL_GENERATE_ALLOCA_H_FALSE@	rm -f $@
+
+# We need the following in order to create <assert.h> when the system
+# doesn't have one that works with the given compiler.
+@GL_GENERATE_ASSERT_H_TRUE@assert.h: assert.in.h verify.h $(top_builddir)/config.status
+@GL_GENERATE_ASSERT_H_TRUE@	$(gl_V_at){ $(SED_HEADER_STDOUT) \
+@GL_GENERATE_ASSERT_H_TRUE@	      -e 's|@''INCLUDE_NEXT''@|$(INCLUDE_NEXT)|g' \
+@GL_GENERATE_ASSERT_H_TRUE@	      -e 's|@''PRAGMA_SYSTEM_HEADER''@|@PRAGMA_SYSTEM_HEADER@|g' \
+@GL_GENERATE_ASSERT_H_TRUE@	      -e 's|@''PRAGMA_COLUMNS''@|@PRAGMA_COLUMNS@|g' \
+@GL_GENERATE_ASSERT_H_TRUE@	      -e 's|@''NEXT_ASSERT_H''@|$(NEXT_ASSERT_H)|g' \
+@GL_GENERATE_ASSERT_H_TRUE@	      < $(srcdir)/assert.in.h && \
+@GL_GENERATE_ASSERT_H_TRUE@	  sed -e '/@assert.h omit start@/,/@assert.h omit end@/d' \
+@GL_GENERATE_ASSERT_H_TRUE@	      -e 's|_gl_verify|_gl_static_assert|g' \
+@GL_GENERATE_ASSERT_H_TRUE@	      -e 's|_GL_VERIFY|_GL_STATIC_ASSERT|g' \
+@GL_GENERATE_ASSERT_H_TRUE@	      -e 's|_GL\(_STATIC_ASSERT_H\)|_GL\1|g' \
+@GL_GENERATE_ASSERT_H_TRUE@	      < $(srcdir)/verify.h; \
+@GL_GENERATE_ASSERT_H_TRUE@	} > $@-t
+@GL_GENERATE_ASSERT_H_TRUE@	$(AM_V_at)mv $@-t $@
+@GL_GENERATE_ASSERT_H_FALSE@assert.h: $(top_builddir)/config.status
+@GL_GENERATE_ASSERT_H_FALSE@	rm -f $@
 
 # We need the following in order to create <errno.h> when the system
 # doesn't have one that is POSIX compliant.
@@ -1865,6 +1937,8 @@ inttypes.h: inttypes.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(WARN_ON_U
 	      -e 's/@''HAVE_DECL_STRTOIMAX''@/$(HAVE_DECL_STRTOIMAX)/g' \
 	      -e 's/@''HAVE_DECL_STRTOUMAX''@/$(HAVE_DECL_STRTOUMAX)/g' \
 	      -e 's/@''HAVE_IMAXDIV_T''@/$(HAVE_IMAXDIV_T)/g' \
+	      -e 's/@''REPLACE_IMAXABS''@/$(REPLACE_IMAXABS)/g' \
+	      -e 's/@''REPLACE_IMAXDIV''@/$(REPLACE_IMAXDIV)/g' \
 	      -e 's/@''REPLACE_STRTOIMAX''@/$(REPLACE_STRTOIMAX)/g' \
 	      -e 's/@''REPLACE_STRTOUMAX''@/$(REPLACE_STRTOUMAX)/g' \
 	      -e 's/@''INT32_MAX_LT_INTMAX_MAX''@/$(INT32_MAX_LT_INTMAX_MAX)/g' \
@@ -1890,24 +1964,6 @@ inttypes.h: inttypes.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(WARN_ON_U
 @GL_GENERATE_LIMITS_H_TRUE@	$(AM_V_at)mv $@-t $@
 @GL_GENERATE_LIMITS_H_FALSE@limits.h: $(top_builddir)/config.status
 @GL_GENERATE_LIMITS_H_FALSE@	rm -f $@
-
-# We need the following in order to create <stdalign.h> when the system
-# doesn't have one that works.
-@GL_GENERATE_STDALIGN_H_TRUE@stdalign.h: stdalign.in.h $(top_builddir)/config.status
-@GL_GENERATE_STDALIGN_H_TRUE@	$(gl_V_at)$(SED_HEADER_TO_AT_t) $(srcdir)/stdalign.in.h
-@GL_GENERATE_STDALIGN_H_TRUE@	$(AM_V_at)mv $@-t $@
-@GL_GENERATE_STDALIGN_H_FALSE@stdalign.h: $(top_builddir)/config.status
-@GL_GENERATE_STDALIGN_H_FALSE@	rm -f $@
-
-# We need the following in order to create <stdbool.h> when the system
-# doesn't have one that works.
-@GL_GENERATE_STDBOOL_H_TRUE@stdbool.h: stdbool.in.h $(top_builddir)/config.status
-@GL_GENERATE_STDBOOL_H_TRUE@	$(gl_V_at)$(SED_HEADER_STDOUT) \
-@GL_GENERATE_STDBOOL_H_TRUE@	  -e 's/@''HAVE__BOOL''@/$(HAVE__BOOL)/g' \
-@GL_GENERATE_STDBOOL_H_TRUE@	  $(srcdir)/stdbool.in.h > $@-t
-@GL_GENERATE_STDBOOL_H_TRUE@	$(AM_V_at)mv $@-t $@
-@GL_GENERATE_STDBOOL_H_FALSE@stdbool.h: $(top_builddir)/config.status
-@GL_GENERATE_STDBOOL_H_FALSE@	rm -f $@
 
 # We need the following in order to create <stddef.h> when the system
 # doesn't have one that works with the given compiler.
@@ -2031,14 +2087,17 @@ stdio.h: stdio.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H) 
 	      -e 's/@''GNULIB_MDA_GETW''@/$(GL_GNULIB_MDA_GETW)/g' \
 	      -e 's/@''GNULIB_MDA_PUTW''@/$(GL_GNULIB_MDA_PUTW)/g' \
 	      -e 's/@''GNULIB_MDA_TEMPNAM''@/$(GL_GNULIB_MDA_TEMPNAM)/g' \
-	      < $(srcdir)/stdio.in.h | \
-	  sed -e 's|@''HAVE_DECL_FCLOSEALL''@|$(HAVE_DECL_FCLOSEALL)|g' \
+	      < $(srcdir)/stdio.in.h > $@-t1
+	$(AM_V_at)sed \
+	      -e 's|@''HAVE_DECL_FCLOSEALL''@|$(HAVE_DECL_FCLOSEALL)|g' \
 	      -e 's|@''HAVE_DECL_FPURGE''@|$(HAVE_DECL_FPURGE)|g' \
 	      -e 's|@''HAVE_DECL_FSEEKO''@|$(HAVE_DECL_FSEEKO)|g' \
 	      -e 's|@''HAVE_DECL_FTELLO''@|$(HAVE_DECL_FTELLO)|g' \
 	      -e 's|@''HAVE_DECL_GETDELIM''@|$(HAVE_DECL_GETDELIM)|g' \
 	      -e 's|@''HAVE_DECL_GETLINE''@|$(HAVE_DECL_GETLINE)|g' \
+	      -e 's|@''HAVE_DECL_GETW''@|$(HAVE_DECL_GETW)|g' \
 	      -e 's|@''HAVE_DECL_OBSTACK_PRINTF''@|$(HAVE_DECL_OBSTACK_PRINTF)|g' \
+	      -e 's|@''HAVE_DECL_PUTW''@|$(HAVE_DECL_PUTW)|g' \
 	      -e 's|@''HAVE_DECL_SNPRINTF''@|$(HAVE_DECL_SNPRINTF)|g' \
 	      -e 's|@''HAVE_DECL_VSNPRINTF''@|$(HAVE_DECL_VSNPRINTF)|g' \
 	      -e 's|@''HAVE_DPRINTF''@|$(HAVE_DPRINTF)|g' \
@@ -2049,6 +2108,8 @@ stdio.h: stdio.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H) 
 	      -e 's|@''HAVE_RENAMEAT''@|$(HAVE_RENAMEAT)|g' \
 	      -e 's|@''HAVE_VASPRINTF''@|$(HAVE_VASPRINTF)|g' \
 	      -e 's|@''HAVE_VDPRINTF''@|$(HAVE_VDPRINTF)|g' \
+	      < $@-t1 > $@-t2
+	$(AM_V_at)sed \
 	      -e 's|@''REPLACE_DPRINTF''@|$(REPLACE_DPRINTF)|g' \
 	      -e 's|@''REPLACE_FCLOSE''@|$(REPLACE_FCLOSE)|g' \
 	      -e 's|@''REPLACE_FDOPEN''@|$(REPLACE_FDOPEN)|g' \
@@ -2086,8 +2147,9 @@ stdio.h: stdio.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H) 
 	      -e '/definitions of _GL_FUNCDECL_RPL/r $(CXXDEFS_H)' \
 	      -e '/definition of _GL_ARG_NONNULL/r $(ARG_NONNULL_H)' \
 	      -e '/definition of _GL_WARN_ON_USE/r $(WARN_ON_USE_H)' \
-	      > $@-t
-	$(AM_V_at)mv $@-t $@
+	      < $@-t2 > $@-t3
+	$(AM_V_at)rm -f $@-t1 $@-t2
+	$(AM_V_at)mv $@-t3 $@
 
 # We need the following in order to create <stdlib.h> when the system
 # doesn't have one that works with the given compiler.
@@ -2107,10 +2169,12 @@ stdlib.h: stdlib.in.h $(top_builddir)/config.status $(CXXDEFS_H) \
 	      -e 's/@''GNULIB_CANONICALIZE_FILE_NAME''@/$(GL_GNULIB_CANONICALIZE_FILE_NAME)/g' \
 	      -e 's/@''GNULIB_FREE_POSIX''@/$(GL_GNULIB_FREE_POSIX)/g' \
 	      -e 's/@''GNULIB_GETLOADAVG''@/$(GL_GNULIB_GETLOADAVG)/g' \
+	      -e 's/@''GNULIB_GETPROGNAME''@/$(GL_GNULIB_GETPROGNAME)/g' \
 	      -e 's/@''GNULIB_GETSUBOPT''@/$(GL_GNULIB_GETSUBOPT)/g' \
 	      -e 's/@''GNULIB_GRANTPT''@/$(GL_GNULIB_GRANTPT)/g' \
 	      -e 's/@''GNULIB_MALLOC_GNU''@/$(GL_GNULIB_MALLOC_GNU)/g' \
 	      -e 's/@''GNULIB_MALLOC_POSIX''@/$(GL_GNULIB_MALLOC_POSIX)/g' \
+	      -e 's/@''GNULIB_MBSTOWCS''@/$(GL_GNULIB_MBSTOWCS)/g' \
 	      -e 's/@''GNULIB_MBTOWC''@/$(GL_GNULIB_MBTOWC)/g' \
 	      -e 's/@''GNULIB_MKDTEMP''@/$(GL_GNULIB_MKDTEMP)/g' \
 	      -e 's/@''GNULIB_MKOSTEMP''@/$(GL_GNULIB_MKOSTEMP)/g' \
@@ -2147,8 +2211,9 @@ stdlib.h: stdlib.in.h $(top_builddir)/config.status $(CXXDEFS_H) \
 	      -e 's/@''GNULIB_MDA_GCVT''@/$(GL_GNULIB_MDA_GCVT)/g' \
 	      -e 's/@''GNULIB_MDA_MKTEMP''@/$(GL_GNULIB_MDA_MKTEMP)/g' \
 	      -e 's/@''GNULIB_MDA_PUTENV''@/$(GL_GNULIB_MDA_PUTENV)/g' \
-	      < $(srcdir)/stdlib.in.h | \
-	  sed -e 's|@''HAVE__EXIT''@|$(HAVE__EXIT)|g' \
+	      < $(srcdir)/stdlib.in.h > $@-t1
+	$(AM_V_at)sed \
+	      -e 's|@''HAVE__EXIT''@|$(HAVE__EXIT)|g' \
 	      -e 's|@''HAVE_ALIGNED_ALLOC''@|$(HAVE_ALIGNED_ALLOC)|g' \
 	      -e 's|@''HAVE_ATOLL''@|$(HAVE_ATOLL)|g' \
 	      -e 's|@''HAVE_CANONICALIZE_FILE_NAME''@|$(HAVE_CANONICALIZE_FILE_NAME)|g' \
@@ -2156,6 +2221,8 @@ stdlib.h: stdlib.in.h $(top_builddir)/config.status $(CXXDEFS_H) \
 	      -e 's|@''HAVE_DECL_FCVT''@|$(HAVE_DECL_FCVT)|g' \
 	      -e 's|@''HAVE_DECL_GCVT''@|$(HAVE_DECL_GCVT)|g' \
 	      -e 's|@''HAVE_DECL_GETLOADAVG''@|$(HAVE_DECL_GETLOADAVG)|g' \
+	      -e 's|@''HAVE_DECL_PROGRAM_INVOCATION_NAME''@|$(HAVE_DECL_PROGRAM_INVOCATION_NAME)|g' \
+	      -e 's|@''HAVE_GETPROGNAME''@|$(HAVE_GETPROGNAME)|g' \
 	      -e 's|@''HAVE_GETSUBOPT''@|$(HAVE_GETSUBOPT)|g' \
 	      -e 's|@''HAVE_GRANTPT''@|$(HAVE_GRANTPT)|g' \
 	      -e 's|@''HAVE_INITSTATE''@|$(HAVE_INITSTATE)|g' \
@@ -2191,17 +2258,28 @@ stdlib.h: stdlib.in.h $(top_builddir)/config.status $(CXXDEFS_H) \
 	      -e 's|@''HAVE_SYS_LOADAVG_H''@|$(HAVE_SYS_LOADAVG_H)|g' \
 	      -e 's|@''HAVE_UNLOCKPT''@|$(HAVE_UNLOCKPT)|g' \
 	      -e 's|@''HAVE_DECL_UNSETENV''@|$(HAVE_DECL_UNSETENV)|g' \
+	      < $@-t1 > $@-t2
+	$(AM_V_at)sed \
+	      -e 's|@''REPLACE__EXIT''@|$(REPLACE__EXIT)|g' \
 	      -e 's|@''REPLACE_ALIGNED_ALLOC''@|$(REPLACE_ALIGNED_ALLOC)|g' \
 	      -e 's|@''REPLACE_CALLOC_FOR_CALLOC_GNU''@|$(REPLACE_CALLOC_FOR_CALLOC_GNU)|g' \
 	      -e 's|@''REPLACE_CALLOC_FOR_CALLOC_POSIX''@|$(REPLACE_CALLOC_FOR_CALLOC_POSIX)|g' \
 	      -e 's|@''REPLACE_CANONICALIZE_FILE_NAME''@|$(REPLACE_CANONICALIZE_FILE_NAME)|g' \
 	      -e 's|@''REPLACE_FREE''@|$(REPLACE_FREE)|g' \
+	      -e 's|@''REPLACE_GETLOADAVG''@|$(REPLACE_GETLOADAVG)|g' \
+	      -e 's|@''REPLACE_GETPROGNAME''@|$(REPLACE_GETPROGNAME)|g' \
+	      -e 's|@''REPLACE_GETSUBOPT''@|$(REPLACE_GETSUBOPT)|g' \
 	      -e 's|@''REPLACE_INITSTATE''@|$(REPLACE_INITSTATE)|g' \
 	      -e 's|@''REPLACE_MALLOC_FOR_MALLOC_GNU''@|$(REPLACE_MALLOC_FOR_MALLOC_GNU)|g' \
 	      -e 's|@''REPLACE_MALLOC_FOR_MALLOC_POSIX''@|$(REPLACE_MALLOC_FOR_MALLOC_POSIX)|g' \
+	      -e 's|@''REPLACE_MB_CUR_MAX''@|$(REPLACE_MB_CUR_MAX)|g' \
+	      -e 's|@''REPLACE_MBSTOWCS''@|$(REPLACE_MBSTOWCS)|g' \
 	      -e 's|@''REPLACE_MBTOWC''@|$(REPLACE_MBTOWC)|g' \
+	      -e 's|@''REPLACE_MKOSTEMP''@|$(REPLACE_MKOSTEMP)|g' \
+	      -e 's|@''REPLACE_MKOSTEMPS''@|$(REPLACE_MKOSTEMPS)|g' \
 	      -e 's|@''REPLACE_MKSTEMP''@|$(REPLACE_MKSTEMP)|g' \
 	      -e 's|@''REPLACE_POSIX_MEMALIGN''@|$(REPLACE_POSIX_MEMALIGN)|g' \
+	      -e 's|@''REPLACE_POSIX_OPENPT''@|$(REPLACE_POSIX_OPENPT)|g' \
 	      -e 's|@''REPLACE_PTSNAME''@|$(REPLACE_PTSNAME)|g' \
 	      -e 's|@''REPLACE_PTSNAME_R''@|$(REPLACE_PTSNAME_R)|g' \
 	      -e 's|@''REPLACE_PUTENV''@|$(REPLACE_PUTENV)|g' \
@@ -2226,8 +2304,9 @@ stdlib.h: stdlib.in.h $(top_builddir)/config.status $(CXXDEFS_H) \
 	      -e '/definition of _Noreturn/r $(_NORETURN_H)' \
 	      -e '/definition of _GL_ARG_NONNULL/r $(ARG_NONNULL_H)' \
 	      -e '/definition of _GL_WARN_ON_USE/r $(WARN_ON_USE_H)' \
-	      > $@-t
-	$(AM_V_at)mv $@-t $@
+	      < $@-t2 > $@-t3
+	$(AM_V_at)rm -f $@-t1 $@-t2
+	$(AM_V_at)mv $@-t3 $@
 
 # We need the following in order to create <string.h> when the system
 # doesn't have one that works with the given compiler.
@@ -2259,6 +2338,7 @@ string.h: string.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H
 	      -e 's/@''GNULIB_MEMMEM''@/$(GL_GNULIB_MEMMEM)/g' \
 	      -e 's/@''GNULIB_MEMPCPY''@/$(GL_GNULIB_MEMPCPY)/g' \
 	      -e 's/@''GNULIB_MEMRCHR''@/$(GL_GNULIB_MEMRCHR)/g' \
+	      -e 's/@''GNULIB_MEMSET_EXPLICIT''@/$(GL_GNULIB_MEMSET_EXPLICIT)/g' \
 	      -e 's/@''GNULIB_RAWMEMCHR''@/$(GL_GNULIB_RAWMEMCHR)/g' \
 	      -e 's/@''GNULIB_STPCPY''@/$(GL_GNULIB_STPCPY)/g' \
 	      -e 's/@''GNULIB_STPNCPY''@/$(GL_GNULIB_STPNCPY)/g' \
@@ -2282,14 +2362,16 @@ string.h: string.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H
 	      -e 's/@''GNULIB_MDA_MEMCCPY''@/$(GL_GNULIB_MDA_MEMCCPY)/g' \
 	      -e 's/@''GNULIB_MDA_STRDUP''@/$(GL_GNULIB_MDA_STRDUP)/g' \
 	      -e 's/@''GNULIB_FREE_POSIX''@/$(GL_GNULIB_FREE_POSIX)/g' \
-	      < $(srcdir)/string.in.h | \
-	  sed -e 's|@''HAVE_EXPLICIT_BZERO''@|$(HAVE_EXPLICIT_BZERO)|g' \
+	      < $(srcdir)/string.in.h > $@-t1
+	$(AM_V_at)sed \
+	      -e 's|@''HAVE_EXPLICIT_BZERO''@|$(HAVE_EXPLICIT_BZERO)|g' \
 	      -e 's|@''HAVE_FFSL''@|$(HAVE_FFSL)|g' \
 	      -e 's|@''HAVE_FFSLL''@|$(HAVE_FFSLL)|g' \
 	      -e 's|@''HAVE_MBSLEN''@|$(HAVE_MBSLEN)|g' \
 	      -e 's|@''HAVE_DECL_MEMMEM''@|$(HAVE_DECL_MEMMEM)|g' \
 	      -e 's|@''HAVE_MEMPCPY''@|$(HAVE_MEMPCPY)|g' \
 	      -e 's|@''HAVE_DECL_MEMRCHR''@|$(HAVE_DECL_MEMRCHR)|g' \
+	      -e 's|@''HAVE_MEMSET_EXPLICIT''@|$(HAVE_MEMSET_EXPLICIT)|g' \
 	      -e 's|@''HAVE_RAWMEMCHR''@|$(HAVE_RAWMEMCHR)|g' \
 	      -e 's|@''HAVE_STPCPY''@|$(HAVE_STPCPY)|g' \
 	      -e 's|@''HAVE_STPNCPY''@|$(HAVE_STPNCPY)|g' \
@@ -2310,7 +2392,9 @@ string.h: string.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H
 	      -e 's|@''REPLACE_FFSLL''@|$(REPLACE_FFSLL)|g' \
 	      -e 's|@''REPLACE_MEMCHR''@|$(REPLACE_MEMCHR)|g' \
 	      -e 's|@''REPLACE_MEMMEM''@|$(REPLACE_MEMMEM)|g' \
+	      -e 's|@''REPLACE_MEMPCPY''@|$(REPLACE_MEMPCPY)|g' \
 	      -e 's|@''REPLACE_FREE''@|$(REPLACE_FREE)|g' \
+	      -e 's|@''REPLACE_STPCPY''@|$(REPLACE_STPCPY)|g' \
 	      -e 's|@''REPLACE_STPNCPY''@|$(REPLACE_STPNCPY)|g' \
 	      -e 's|@''REPLACE_STRCHRNUL''@|$(REPLACE_STRCHRNUL)|g' \
 	      -e 's|@''REPLACE_STRDUP''@|$(REPLACE_STRDUP)|g' \
@@ -2328,8 +2412,9 @@ string.h: string.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H
 	      -e '/definitions of _GL_FUNCDECL_RPL/r $(CXXDEFS_H)' \
 	      -e '/definition of _GL_ARG_NONNULL/r $(ARG_NONNULL_H)' \
 	      -e '/definition of _GL_WARN_ON_USE/r $(WARN_ON_USE_H)' \
-	      > $@-t
-	$(AM_V_at)mv $@-t $@
+	      < $@-t1 > $@-t2
+	$(AM_V_at)rm -f $@-t1
+	$(AM_V_at)mv $@-t2 $@
 
 # We need the following in order to create <strings.h> when the system
 # doesn't have one that works with the given compiler.
@@ -2415,6 +2500,8 @@ unistd.h: unistd.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H
 	      -e 's/@''GNULIB_FDATASYNC''@/$(GL_GNULIB_FDATASYNC)/g' \
 	      -e 's/@''GNULIB_FSYNC''@/$(GL_GNULIB_FSYNC)/g' \
 	      -e 's/@''GNULIB_FTRUNCATE''@/$(GL_GNULIB_FTRUNCATE)/g' \
+	      < $(srcdir)/unistd.in.h > $@-t1
+	$(AM_V_at)sed \
 	      -e 's/@''GNULIB_GETCWD''@/$(GL_GNULIB_GETCWD)/g' \
 	      -e 's/@''GNULIB_GETDOMAINNAME''@/$(GL_GNULIB_GETDOMAINNAME)/g' \
 	      -e 's/@''GNULIB_GETDTABLESIZE''@/$(GL_GNULIB_GETDTABLESIZE)/g' \
@@ -2476,8 +2563,9 @@ unistd.h: unistd.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H
 	      -e 's/@''GNULIB_MDA_SWAB''@/$(GL_GNULIB_MDA_SWAB)/g' \
 	      -e 's/@''GNULIB_MDA_UNLINK''@/$(GL_GNULIB_MDA_UNLINK)/g' \
 	      -e 's/@''GNULIB_MDA_WRITE''@/$(GL_GNULIB_MDA_WRITE)/g' \
-	      < $(srcdir)/unistd.in.h | \
-	  sed -e 's|@''HAVE_CHOWN''@|$(HAVE_CHOWN)|g' \
+	      < $@-t1 > $@-t2
+	$(AM_V_at)sed \
+	      -e 's|@''HAVE_CHOWN''@|$(HAVE_CHOWN)|g' \
 	      -e 's|@''HAVE_COPY_FILE_RANGE''@|$(HAVE_COPY_FILE_RANGE)|g' \
 	      -e 's|@''HAVE_DUP3''@|$(HAVE_DUP3)|g' \
 	      -e 's|@''HAVE_EUIDACCESS''@|$(HAVE_EUIDACCESS)|g' \
@@ -2524,13 +2612,15 @@ unistd.h: unistd.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H
 	      -e 's|@''HAVE_DECL_TTYNAME_R''@|$(HAVE_DECL_TTYNAME_R)|g' \
 	      -e 's|@''HAVE_OS_H''@|$(HAVE_OS_H)|g' \
 	      -e 's|@''HAVE_SYS_PARAM_H''@|$(HAVE_SYS_PARAM_H)|g' \
-	  | \
-	  sed -e 's|@''REPLACE_ACCESS''@|$(REPLACE_ACCESS)|g' \
+	      < $@-t2 > $@-t3
+	$(AM_V_at)sed \
+	      -e 's|@''REPLACE_ACCESS''@|$(REPLACE_ACCESS)|g' \
 	      -e 's|@''REPLACE_CHOWN''@|$(REPLACE_CHOWN)|g' \
 	      -e 's|@''REPLACE_CLOSE''@|$(REPLACE_CLOSE)|g' \
 	      -e 's|@''REPLACE_COPY_FILE_RANGE''@|$(REPLACE_COPY_FILE_RANGE)|g' \
 	      -e 's|@''REPLACE_DUP''@|$(REPLACE_DUP)|g' \
 	      -e 's|@''REPLACE_DUP2''@|$(REPLACE_DUP2)|g' \
+	      -e 's|@''REPLACE_DUP3''@|$(REPLACE_DUP3)|g' \
 	      -e 's|@''REPLACE_EXECL''@|$(REPLACE_EXECL)|g' \
 	      -e 's|@''REPLACE_EXECLE''@|$(REPLACE_EXECLE)|g' \
 	      -e 's|@''REPLACE_EXECLP''@|$(REPLACE_EXECLP)|g' \
@@ -2540,10 +2630,12 @@ unistd.h: unistd.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H
 	      -e 's|@''REPLACE_EXECVPE''@|$(REPLACE_EXECVPE)|g' \
 	      -e 's|@''REPLACE_FACCESSAT''@|$(REPLACE_FACCESSAT)|g' \
 	      -e 's|@''REPLACE_FCHOWNAT''@|$(REPLACE_FCHOWNAT)|g' \
+	      -e 's|@''REPLACE_FDATASYNC''@|$(REPLACE_FDATASYNC)|g' \
 	      -e 's|@''REPLACE_FTRUNCATE''@|$(REPLACE_FTRUNCATE)|g' \
 	      -e 's|@''REPLACE_GETCWD''@|$(REPLACE_GETCWD)|g' \
 	      -e 's|@''REPLACE_GETDOMAINNAME''@|$(REPLACE_GETDOMAINNAME)|g' \
 	      -e 's|@''REPLACE_GETDTABLESIZE''@|$(REPLACE_GETDTABLESIZE)|g' \
+	      -e 's|@''REPLACE_GETENTROPY''@|$(REPLACE_GETENTROPY)|g' \
 	      -e 's|@''REPLACE_GETLOGIN_R''@|$(REPLACE_GETLOGIN_R)|g' \
 	      -e 's|@''REPLACE_GETGROUPS''@|$(REPLACE_GETGROUPS)|g' \
 	      -e 's|@''REPLACE_GETPAGESIZE''@|$(REPLACE_GETPAGESIZE)|g' \
@@ -2554,12 +2646,14 @@ unistd.h: unistd.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H
 	      -e 's|@''REPLACE_LINK''@|$(REPLACE_LINK)|g' \
 	      -e 's|@''REPLACE_LINKAT''@|$(REPLACE_LINKAT)|g' \
 	      -e 's|@''REPLACE_LSEEK''@|$(REPLACE_LSEEK)|g' \
+	      -e 's|@''REPLACE_PIPE2''@|$(REPLACE_PIPE2)|g' \
 	      -e 's|@''REPLACE_PREAD''@|$(REPLACE_PREAD)|g' \
 	      -e 's|@''REPLACE_PWRITE''@|$(REPLACE_PWRITE)|g' \
 	      -e 's|@''REPLACE_READ''@|$(REPLACE_READ)|g' \
 	      -e 's|@''REPLACE_READLINK''@|$(REPLACE_READLINK)|g' \
 	      -e 's|@''REPLACE_READLINKAT''@|$(REPLACE_READLINKAT)|g' \
 	      -e 's|@''REPLACE_RMDIR''@|$(REPLACE_RMDIR)|g' \
+	      -e 's|@''REPLACE_SETHOSTNAME''@|$(REPLACE_SETHOSTNAME)|g' \
 	      -e 's|@''REPLACE_SLEEP''@|$(REPLACE_SLEEP)|g' \
 	      -e 's|@''REPLACE_SYMLINK''@|$(REPLACE_SYMLINK)|g' \
 	      -e 's|@''REPLACE_SYMLINKAT''@|$(REPLACE_SYMLINKAT)|g' \
@@ -2575,8 +2669,9 @@ unistd.h: unistd.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H
 	      -e '/definitions of _GL_FUNCDECL_RPL/r $(CXXDEFS_H)' \
 	      -e '/definition of _GL_ARG_NONNULL/r $(ARG_NONNULL_H)' \
 	      -e '/definition of _GL_WARN_ON_USE/r $(WARN_ON_USE_H)' \
-	      > $@-t
-	$(AM_V_at)mv $@-t $@
+	      < $@-t3 > $@-t4
+	$(AM_V_at)rm -f $@-t1 $@-t2 $@-t3
+	$(AM_V_at)mv $@-t4 $@
 
 # We need the following in order to create <wchar.h> when the system
 # version does not work standalone.
@@ -2594,6 +2689,7 @@ wchar.h: wchar.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H) 
 	      -e 's/@''GNULIB_BTOWC''@/$(GL_GNULIB_BTOWC)/g' \
 	      -e 's/@''GNULIB_WCTOB''@/$(GL_GNULIB_WCTOB)/g' \
 	      -e 's/@''GNULIB_MBSINIT''@/$(GL_GNULIB_MBSINIT)/g' \
+	      -e 's/@''GNULIB_MBSZERO''@/$(GL_GNULIB_MBSZERO)/g' \
 	      -e 's/@''GNULIB_MBRTOWC''@/$(GL_GNULIB_MBRTOWC)/g' \
 	      -e 's/@''GNULIB_MBRLEN''@/$(GL_GNULIB_MBRLEN)/g' \
 	      -e 's/@''GNULIB_MBSRTOWCS''@/$(GL_GNULIB_MBSRTOWCS)/g' \
@@ -2634,8 +2730,9 @@ wchar.h: wchar.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H) 
 	      -e 's/@''GNULIB_WCSFTIME''@/$(GL_GNULIB_WCSFTIME)/g' \
 	      -e 's/@''GNULIB_MDA_WCSDUP''@/$(GL_GNULIB_MDA_WCSDUP)/g' \
 	      -e 's/@''GNULIB_FREE_POSIX''@/$(GL_GNULIB_FREE_POSIX)/g' \
-	      < $(srcdir)/wchar.in.h | \
-	  sed -e 's|@''HAVE_WINT_T''@|$(HAVE_WINT_T)|g' \
+	      < $(srcdir)/wchar.in.h > $@-t1
+	$(AM_V_at)sed \
+	      -e 's|@''HAVE_WINT_T''@|$(HAVE_WINT_T)|g' \
 	      -e 's|@''HAVE_BTOWC''@|$(HAVE_BTOWC)|g' \
 	      -e 's|@''HAVE_MBSINIT''@|$(HAVE_MBSINIT)|g' \
 	      -e 's|@''HAVE_MBRTOWC''@|$(HAVE_MBRTOWC)|g' \
@@ -2678,8 +2775,9 @@ wchar.h: wchar.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H) 
 	      -e 's|@''HAVE_DECL_WCTOB''@|$(HAVE_DECL_WCTOB)|g' \
 	      -e 's|@''HAVE_DECL_WCSDUP''@|$(HAVE_DECL_WCSDUP)|g' \
 	      -e 's|@''HAVE_DECL_WCWIDTH''@|$(HAVE_DECL_WCWIDTH)|g' \
-	  | \
-	  sed -e 's|@''REPLACE_MBSTATE_T''@|$(REPLACE_MBSTATE_T)|g' \
+	      < $@-t1 > $@-t2
+	$(AM_V_at)sed \
+	      -e 's|@''REPLACE_MBSTATE_T''@|$(REPLACE_MBSTATE_T)|g' \
 	      -e 's|@''REPLACE_BTOWC''@|$(REPLACE_BTOWC)|g' \
 	      -e 's|@''REPLACE_WCTOB''@|$(REPLACE_WCTOB)|g' \
 	      -e 's|@''REPLACE_FREE''@|$(REPLACE_FREE)|g' \
@@ -2694,12 +2792,18 @@ wchar.h: wchar.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H) 
 	      -e 's|@''REPLACE_WCWIDTH''@|$(REPLACE_WCWIDTH)|g' \
 	      -e 's|@''REPLACE_WCSWIDTH''@|$(REPLACE_WCSWIDTH)|g' \
 	      -e 's|@''REPLACE_WCSFTIME''@|$(REPLACE_WCSFTIME)|g' \
+	      -e 's|@''REPLACE_WCSCMP''@|$(REPLACE_WCSCMP)|g' \
+	      -e 's|@''REPLACE_WCSNCMP''@|$(REPLACE_WCSNCMP)|g' \
+	      -e 's|@''REPLACE_WCSSTR''@|$(REPLACE_WCSSTR)|g' \
 	      -e 's|@''REPLACE_WCSTOK''@|$(REPLACE_WCSTOK)|g' \
+	      -e 's|@''REPLACE_WMEMCMP''@|$(REPLACE_WMEMCMP)|g' \
+	      -e 's|@''REPLACE_WMEMPCPY''@|$(REPLACE_WMEMPCPY)|g' \
 	      -e '/definitions of _GL_FUNCDECL_RPL/r $(CXXDEFS_H)' \
 	      -e '/definition of _GL_ARG_NONNULL/r $(ARG_NONNULL_H)' \
 	      -e '/definition of _GL_WARN_ON_USE/r $(WARN_ON_USE_H)' \
-	      > $@-t
-	$(AM_V_at)mv $@-t $@
+	      < $@-t2 > $@-t3
+	$(AM_V_at)rm -f $@-t1 $@-t2
+	$(AM_V_at)mv $@-t3 $@
 
 mostlyclean-local: mostlyclean-generic
 	@for dir in '' $(MOSTLYCLEANDIRS); do \
