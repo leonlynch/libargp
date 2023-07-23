@@ -20,8 +20,8 @@ You have another version of autoconf.  It may work, but is not guaranteed to.
 If you have problems, you may need to regenerate the build system entirely.
 To do so, use the procedure documented by the package, typically 'autoreconf'.])])
 
-# po.m4 serial 31 (gettext-0.20.2)
-dnl Copyright (C) 1995-2014, 2016, 2018-2020 Free Software Foundation, Inc.
+# po.m4 serial 32 (gettext-0.21.1)
+dnl Copyright (C) 1995-2014, 2016, 2018-2022 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
@@ -201,7 +201,9 @@ changequote([,])dnl
                 #      presentlang can be used as a fallback for messages
                 #      which are not translated in the desiredlang catalog).
                 case "$desiredlang" in
-                  "$presentlang"*) useit=yes;;
+                  "$presentlang" | "$presentlang"_* | "$presentlang".* | "$presentlang"@*)
+                    useit=yes
+                    ;;
                 esac
               done
               if test $useit = yes; then
@@ -401,7 +403,9 @@ changequote([,])dnl
         #      presentlang can be used as a fallback for messages
         #      which are not translated in the desiredlang catalog).
         case "$desiredlang" in
-          "$presentlang"*) useit=yes;;
+          "$presentlang" | "$presentlang"_* | "$presentlang".* | "$presentlang"@*)
+            useit=yes
+            ;;
         esac
       done
       if test $useit = yes; then
@@ -1640,6 +1644,9 @@ m4_include([glm4/00gnulib.m4])
 m4_include([glm4/absolute-header.m4])
 m4_include([glm4/alloca.m4])
 m4_include([glm4/argp.m4])
+m4_include([glm4/assert_h.m4])
+m4_include([glm4/c-bool.m4])
+m4_include([glm4/codeset.m4])
 m4_include([glm4/double-slash-root.m4])
 m4_include([glm4/errno_h.m4])
 m4_include([glm4/exponentd.m4])
@@ -1655,15 +1662,21 @@ m4_include([glm4/inttypes.m4])
 m4_include([glm4/inttypes_h.m4])
 m4_include([glm4/libtool.m4])
 m4_include([glm4/limits-h.m4])
+m4_include([glm4/locale-fr.m4])
+m4_include([glm4/locale-ja.m4])
+m4_include([glm4/locale-zh.m4])
 m4_include([glm4/ltoptions.m4])
 m4_include([glm4/ltsugar.m4])
 m4_include([glm4/ltversion.m4])
 m4_include([glm4/lt~obsolete.m4])
 m4_include([glm4/malloc.m4])
+m4_include([glm4/mbrtowc.m4])
+m4_include([glm4/mbstate_t.m4])
 m4_include([glm4/memchr.m4])
 m4_include([glm4/mempcpy.m4])
 m4_include([glm4/mmap-anon.m4])
 m4_include([glm4/multiarch.m4])
+m4_include([glm4/musl.m4])
 m4_include([glm4/nocrash.m4])
 m4_include([glm4/off_t.m4])
 m4_include([glm4/printf.m4])
@@ -1672,7 +1685,6 @@ m4_include([glm4/size_max.m4])
 m4_include([glm4/sleep.m4])
 m4_include([glm4/ssize_t.m4])
 m4_include([glm4/stdalign.m4])
-m4_include([glm4/stdbool.m4])
 m4_include([glm4/stddef_h.m4])
 m4_include([glm4/stdint.m4])
 m4_include([glm4/stdint_h.m4])
