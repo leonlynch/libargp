@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2022 Leon Lynch
+# Copyright (c) 2022, 2024 Leon Lynch
 #
 # This file is licensed under the terms of the LGPL v2.1 license.
 # See LICENSE file.
@@ -31,6 +31,12 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
 	add_compile_options(-Wall)
 	add_compile_options($<$<CONFIG:Debug>:-ggdb>)
 	add_compile_options($<$<CONFIG:RelWithDebInfo>:-ggdb>)
+endif()
+if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
+	add_compile_options(-Wall)
+endif()
+if(CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
+	add_compile_options(-Wall)
 endif()
 
 message(CHECK_START "Configuring libargp...")
