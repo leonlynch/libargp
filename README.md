@@ -47,8 +47,8 @@ This CMake project can be added to CMake parent projects in various ways:
 License
 -------
 
-[Gnulib](https://www.gnu.org/software/gnulib/) is copyright (c) [Free Software Foundation](https://www.fsf.org/)
+[Gnulib](https://www.gnu.org/software/gnulib/) is copyright [Free Software Foundation](https://www.fsf.org/)
 
-Helpers in this project are copyright (c) 2022, 2023 [Leon Lynch](https://github.com/leonlynch).
+Helpers in this project are copyright 2022-2024 [Leon Lynch](https://github.com/leonlynch).
 
 This project is licensed under the terms of the LGPL v2.1 license. See LICENSE file.
