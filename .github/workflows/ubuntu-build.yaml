@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright 2022, 2024 Leon Lynch
+# Copyright 2022, 2024-2025 Leon Lynch
 #
 # This file is licensed under the terms of the LGPL v2.1 license.
 # See LICENSE file.
@@ -15,8 +15,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { name: "Ubuntu 20.04", os: ubuntu-20.04, build_type: "Debug" }
-          - { name: "Ubuntu 20.04", os: ubuntu-20.04, build_type: "Release" }
           - { name: "Ubuntu 22.04", os: ubuntu-22.04, build_type: "Debug" }
           - { name: "Ubuntu 22.04", os: ubuntu-22.04, build_type: "Release" }
           - { name: "Ubuntu 24.04", os: ubuntu-24.04, build_type: "Debug" }
