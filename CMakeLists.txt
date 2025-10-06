@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright 2022, 2024 Leon Lynch
+# Copyright 2022, 2024-2025 Leon Lynch
 #
 # This file is licensed under the terms of the LGPL v2.1 license.
 # See LICENSE file.
@@ -62,6 +62,13 @@ if(CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
 	endforeach()
 endif()
 
+# Find POSIX make needed for autotools build
+find_program(libargp_MAKE_PROGRAM NAMES make gmake)
+if(NOT libargp_MAKE_PROGRAM)
+	message(FATAL_ERROR "POSIX make not found. Ensure that make or gmake is available.")
+endif()
+message(STATUS "Found POSIX make: ${libargp_MAKE_PROGRAM}")
+
 if(CMAKE_HOST_WIN32)
 	# The CMake execute_process() command doesn't use a shell and therefore a
 	# Bash-compatible shell must be invoked explicitly on a Windows host.
@@ -105,7 +112,7 @@ message(CHECK_PASS "done")
 set(libargp_LIBRARY "${libargp_BINARY_DIR}/gllib/.libs/libargp.a")
 add_custom_command(
 	OUTPUT ${libargp_LIBRARY}
-	COMMAND make
+	COMMAND ${libargp_MAKE_PROGRAM}
 	WORKING_DIRECTORY ${libargp_BINARY_DIR}
 )
 add_custom_target(libargp-target DEPENDS ${libargp_LIBRARY})
