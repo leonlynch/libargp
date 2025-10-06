@@ -112,8 +112,13 @@ message(CHECK_PASS "done")
 set(libargp_LIBRARY "${libargp_BINARY_DIR}/gllib/.libs/libargp.a")
 add_custom_command(
 	OUTPUT ${libargp_LIBRARY}
-	COMMAND ${libargp_MAKE_PROGRAM}
+	COMMAND ${CMAKE_COMMAND}
+		-DMAKE_PROGRAM=${libargp_MAKE_PROGRAM}
+		-DWORKING_DIR=${libargp_BINARY_DIR}
+		-DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE_MAKEFILE}
+		-P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/build-libargp.cmake
 	WORKING_DIRECTORY ${libargp_BINARY_DIR}
+	VERBATIM
 )
 add_custom_target(libargp-target DEPENDS ${libargp_LIBRARY})
 
