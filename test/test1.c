@@ -1,7 +1,7 @@
 /**
  * @file test1.c
  *
- * Copyright 2022 Leon Lynch
+ * Copyright 2022, 2025 Leon Lynch
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -84,7 +84,7 @@ int main(int argc, char** argv)
 	}
 
 	// Parse command line options
-	r = argp_parse(&argp_config, argc, argv, 0, 0, &options);
+	r = argp_parse(&argp_config, argc, argv, ARGP_NO_EXIT, 0, &options);
 	if (r) {
 		fprintf(stderr, "Failed to parse command line\n");
 		return 1;
