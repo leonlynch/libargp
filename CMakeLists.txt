@@ -95,16 +95,19 @@ endif()
 if(CMAKE_BUILD_TYPE STREQUAL Debug OR CMAKE_BUILD_TYPE STREQUAL RelWithDebInfo)
 	string(APPEND libargp_CFLAGS " ${CMAKE_C_FLAGS_DEBUG}")
 endif()
+string(STRIP ${libargp_CFLAGS} libargp_CFLAGS)
 
 # Configure libargp
-string(STRIP ${libargp_CFLAGS} libargp_CFLAGS)
-execute_process(
-	COMMAND ${libargp_SHELL} ${libargp_SOURCE_DIR}/configure ${libargp_CC_param} CFLAGS=${libargp_CFLAGS} ${libargp_srcdir_param} --disable-maintainer-mode
-	WORKING_DIRECTORY ${libargp_BINARY_DIR}
-	COMMAND_ECHO STDOUT
-)
 if(NOT EXISTS ${libargp_BINARY_DIR}/Makefile)
-	message(FATAL_ERROR "Error during libargp configuration")
+	execute_process(
+		COMMAND ${libargp_SHELL} ${libargp_SOURCE_DIR}/configure ${libargp_CC_param} CFLAGS=${libargp_CFLAGS} ${libargp_srcdir_param} --disable-maintainer-mode
+		WORKING_DIRECTORY ${libargp_BINARY_DIR}
+		COMMAND_ECHO STDOUT
+		RESULT_VARIABLE result
+	)
+	if(NOT result EQUAL 0 OR NOT EXISTS ${libargp_BINARY_DIR}/Makefile)
+		message(FATAL_ERROR "Error during libargp configuration")
+	endif()
 endif()
 
 message(CHECK_PASS "done")
