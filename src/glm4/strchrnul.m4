@@ -10,7 +10,7 @@ AC_DEFUN([gl_FUNC_STRCHRNUL],
   AC_REQUIRE([AC_USE_SYSTEM_EXTENSIONS])
 
   AC_REQUIRE([gl_STRING_H_DEFAULTS])
-  gl_CHECK_FUNCS_ANDROID([strchrnul], [[#include <string.h>]])
+  gl_CHECK_FUNCS_ANDROID_MACOS([strchrnul], [[#include <string.h>]])
   if test $ac_cv_func_strchrnul = no; then
     HAVE_STRCHRNUL=0
     case "$gl_cv_onwards_func_strchrnul" in
