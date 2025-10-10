@@ -1,19 +1,41 @@
 #!/bin/bash
 
+set -e
+
 git clone https://git.savannah.gnu.org/git/gnulib.git gnulib
 
-GIT_DESCRIBE=`git -C gnulib describe`
+GIT_DESCRIBE=`git -C gnulib describe --always`
 GIT_DATETIME=`git -C gnulib log -1 --format="%ct" | xargs -I{} date -d @{} +%Y%m%dT%H%M%S`
-OUTPUT_DIR="libargp-${GIT_DESCRIBE}-${GIT_DATETIME}"
-OUTPUT_DIR_LGPL="${OUTPUT_DIR}-lgpl"
+OUTPUT_DIR="libargp-${GIT_DESCRIBE}-${GIT_DATETIME}-lgpl"
+mkdir -p "${OUTPUT_DIR}"
 
-# Extract module with complete autoconf/automake build environment
-gnulib/gnulib-tool --dir="${OUTPUT_DIR}" --lib=libargp --libtool --create-testdir --without-tests argp
+# Create minimal configure.ac
+cat > "${OUTPUT_DIR}/configure.ac" <<'EOF'
+AC_INIT([libargp], [1.0])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_CONFIG_MACRO_DIR([glm4])
+AC_CONFIG_HEADERS([config.h])
+AM_INIT_AUTOMAKE([foreign -Wall])
+AM_MAINTAINER_MODE([enable])
+AC_PROG_CC
+AC_PROG_RANLIB
+gl_EARLY
+LT_INIT([win32-dll])
+gl_INIT
+AC_CONFIG_FILES([Makefile gllib/Makefile])
+AC_OUTPUT
+EOF
+
+# Create minimal Makefile.am
+cat > "${OUTPUT_DIR}/Makefile.am" <<'EOF'
+SUBDIRS = gllib
+EOF
 
 # Extract LGPL module source
-mkdir "${OUTPUT_DIR_LGPL}"
-touch "${OUTPUT_DIR_LGPL}"/configure.ac
-gnulib/gnulib-tool --dir="${OUTPUT_DIR_LGPL}" --lib=libargp --libtool --import --lgpl argp
-cp "${OUTPUT_DIR_LGPL}"/lib/*.{c,h} "${OUTPUT_DIR}"/gllib
+gnulib/gnulib-tool --dir="${OUTPUT_DIR}" --lib=libargp --source-base=gllib --m4-base=glm4 --libtool --lgpl --import argp
+
+# Generate build system for libargp and remove autotools cache
+autoreconf --force --install --verbose "${OUTPUT_DIR}"
+rm -rf "${OUTPUT_DIR}/autom4te.cache"
 
 echo "libargp output: ${OUTPUT_DIR}"
