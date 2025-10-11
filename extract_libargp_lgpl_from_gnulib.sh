@@ -2,7 +2,7 @@
 
 set -e
 
-git clone https://git.savannah.gnu.org/git/gnulib.git gnulib
+git clone --branch stable-202507 https://git.savannah.gnu.org/git/gnulib.git gnulib
 
 GIT_DESCRIBE=`git -C gnulib describe --always`
 GIT_DATETIME=`git -C gnulib log -1 --format="%ct" | xargs -I{} date -d @{} +%Y%m%dT%H%M%S`
