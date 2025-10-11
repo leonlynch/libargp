@@ -1,7 +1,7 @@
 /* Config needed by argp.h when used without autotools. The content is mostly
    copied from config.h.in
 
-   Copyright (C) 1995-2022 Free Software Foundation, Inc.
+   Copyright (C) 1995-2025 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Written by Miles Bader <miles@gnu.ai.mit.edu>.
 
@@ -67,17 +67,15 @@
  */
 #if (((defined __APPLE__ && defined __MACH__) \
       || defined __DragonFly__ || defined __FreeBSD__) \
-     && (defined HAVE___HEADER_INLINE \
-         ? (defined __cplusplus && defined __GNUC_STDC_INLINE__ \
-            && ! defined __clang__) \
-         : ((! defined _DONT_USE_CTYPE_INLINE_ \
-             && (defined __GNUC__ || defined __cplusplus)) \
-            || (defined _FORTIFY_SOURCE && 0 < _FORTIFY_SOURCE \
-                && defined __GNUC__ && ! defined __cplusplus))))
+     && ((! defined _DONT_USE_CTYPE_INLINE_ \
+         && (defined __GNUC__ || defined __cplusplus)) \
+        || (defined _FORTIFY_SOURCE && 0 < _FORTIFY_SOURCE \
+            && defined __GNUC__ && ! defined __cplusplus)))
 # define _GL_EXTERN_INLINE_STDHEADER_BUG
 #endif
 #if ((__GNUC__ \
-      ? defined __GNUC_STDC_INLINE__ && __GNUC_STDC_INLINE__ \
+      ? (defined __GNUC_STDC_INLINE__ && __GNUC_STDC_INLINE__ \
+         && !defined __PCC__) \
       : (199901L <= __STDC_VERSION__ \
          && !defined __HP_cc \
          && !defined __PGI \
@@ -87,6 +85,7 @@
 # define _GL_EXTERN_INLINE extern inline
 # define _GL_EXTERN_INLINE_IN_USE
 #elif (2 < __GNUC__ + (7 <= __GNUC_MINOR__) && !defined __STRICT_ANSI__ \
+       && !defined __PCC__ \
        && !defined _GL_EXTERN_INLINE_STDHEADER_BUG)
 # if defined __GNUC_GNU_INLINE__ && __GNUC_GNU_INLINE__
    /* __gnu_inline__ suppresses a GCC 4.2 diagnostic.  */
@@ -126,61 +125,75 @@
 # define _GL_INLINE_HEADER_END
 #endif
 
-/* True if the compiler says it groks GNU C version MAJOR.MINOR.  */
-#if defined __GNUC__ && defined __GNUC_MINOR__
+/* True if the compiler says it groks GNU C version MAJOR.MINOR.
+    Except that
+      - clang groks GNU C 4.2, even on Windows, where it does not define
+        __GNUC__.
+      - The OpenMandriva-modified clang compiler pretends that it groks
+        GNU C version 13.1, but it doesn't: It does not support
+        __attribute__ ((__malloc__ (f, i))), nor does it support
+        __attribute__ ((__warning__ (message))) on a function redeclaration.
+      - Users can make clang lie as well, through the -fgnuc-version option.  */
+#if defined __GNUC__ && defined __GNUC_MINOR__ && !defined __clang__
 # define _GL_GNUC_PREREQ(major, minor) \
     ((major) < __GNUC__ + ((minor) <= __GNUC_MINOR__))
+#elif defined __clang__
+  /* clang really only groks GNU C 4.2.  */
+# define _GL_GNUC_PREREQ(major, minor) \
+    ((major) < 4 + ((minor) <= 2))
 #else
 # define _GL_GNUC_PREREQ(major, minor) 0
 #endif
 
 /* Attributes.  */
-#if (defined __has_attribute \
-     && (!defined __clang_minor__ \
-         || (defined __apple_build_version__ \
-             ? 6000000 <= __apple_build_version__ \
-             : 3 < __clang_major__ + (5 <= __clang_minor__))))
-# define _GL_HAS_ATTRIBUTE(attr) __has_attribute (__##attr##__)
-#else
-# define _GL_HAS_ATTRIBUTE(attr) _GL_ATTR_##attr
-# define _GL_ATTR_alloc_size _GL_GNUC_PREREQ (4, 3)
-# define _GL_ATTR_always_inline _GL_GNUC_PREREQ (3, 2)
-# define _GL_ATTR_artificial _GL_GNUC_PREREQ (4, 3)
-# define _GL_ATTR_cold _GL_GNUC_PREREQ (4, 3)
-# define _GL_ATTR_const _GL_GNUC_PREREQ (2, 95)
-# define _GL_ATTR_deprecated _GL_GNUC_PREREQ (3, 1)
-# define _GL_ATTR_diagnose_if 0
-# define _GL_ATTR_error _GL_GNUC_PREREQ (4, 3)
-# define _GL_ATTR_externally_visible _GL_GNUC_PREREQ (4, 1)
-# define _GL_ATTR_fallthrough _GL_GNUC_PREREQ (7, 0)
-# define _GL_ATTR_format _GL_GNUC_PREREQ (2, 7)
-# define _GL_ATTR_leaf _GL_GNUC_PREREQ (4, 6)
-# define _GL_ATTR_malloc _GL_GNUC_PREREQ (3, 0)
-# ifdef _ICC
-#  define _GL_ATTR_may_alias 0
+/* Define _GL_HAS_ATTRIBUTE only once, because on FreeBSD, with gcc < 5, if
+   <config.h> gets included once again after <sys/cdefs.h>, __has_attribute(x)
+   expands to 0 always, and redefining _GL_HAS_ATTRIBUTE would turn off all
+   attributes.  */
+#ifndef _GL_HAS_ATTRIBUTE
+# if (defined __has_attribute \
+      && (!defined __clang_minor__ \
+          || (defined __apple_build_version__ \
+              ? 7000000 <= __apple_build_version__ \
+              : 5 <= __clang_major__)))
+#  define _GL_HAS_ATTRIBUTE(attr) __has_attribute (__##attr##__)
 # else
-#  define _GL_ATTR_may_alias _GL_GNUC_PREREQ (3, 3)
+#  define _GL_HAS_ATTRIBUTE(attr) _GL_ATTR_##attr
+/* The following lines list the first GCC version that supports the attribute.
+   Although the lines are not used in GCC 5 and later (as GCC 5 introduced
+   __has_attribute support), list GCC versions 5+ anyway for completeness.  */
+#  define _GL_ATTR_alloc_size _GL_GNUC_PREREQ (4, 3)
+#  define _GL_ATTR_always_inline _GL_GNUC_PREREQ (3, 2)
+#  define _GL_ATTR_artificial _GL_GNUC_PREREQ (4, 3)
+#  define _GL_ATTR_cold _GL_GNUC_PREREQ (4, 3)
+#  define _GL_ATTR_const _GL_GNUC_PREREQ (2, 95)
+#  define _GL_ATTR_deprecated _GL_GNUC_PREREQ (3, 1)
+#  define _GL_ATTR_diagnose_if 0
+#  define _GL_ATTR_error _GL_GNUC_PREREQ (4, 3)
+#  define _GL_ATTR_externally_visible _GL_GNUC_PREREQ (4, 1)
+#  define _GL_ATTR_fallthrough _GL_GNUC_PREREQ (7, 0)
+#  define _GL_ATTR_format _GL_GNUC_PREREQ (2, 7)
+#  define _GL_ATTR_leaf _GL_GNUC_PREREQ (4, 6)
+#  define _GL_ATTR_malloc _GL_GNUC_PREREQ (3, 0)
+#  ifdef _ICC
+#   define _GL_ATTR_may_alias 0
+#  else
+#   define _GL_ATTR_may_alias _GL_GNUC_PREREQ (3, 3)
+#  endif
+#  define _GL_ATTR_noinline _GL_GNUC_PREREQ (3, 1)
+#  define _GL_ATTR_nonnull _GL_GNUC_PREREQ (3, 3)
+#  define _GL_ATTR_nonnull_if_nonzero _GL_GNUC_PREREQ (15, 1)
+#  define _GL_ATTR_nonstring _GL_GNUC_PREREQ (8, 0)
+#  define _GL_ATTR_nothrow _GL_GNUC_PREREQ (3, 3)
+#  define _GL_ATTR_packed _GL_GNUC_PREREQ (2, 7)
+#  define _GL_ATTR_pure _GL_GNUC_PREREQ (2, 96)
+#  define _GL_ATTR_reproducible _GL_GNUC_PREREQ (15, 1)
+#  define _GL_ATTR_returns_nonnull _GL_GNUC_PREREQ (4, 9)
+#  define _GL_ATTR_sentinel _GL_GNUC_PREREQ (4, 0)
+#  define _GL_ATTR_unsequenced _GL_GNUC_PREREQ (15, 1)
+#  define _GL_ATTR_unused _GL_GNUC_PREREQ (2, 7)
+#  define _GL_ATTR_warn_unused_result _GL_GNUC_PREREQ (3, 4)
 # endif
-# define _GL_ATTR_noinline _GL_GNUC_PREREQ (3, 1)
-# define _GL_ATTR_nonnull _GL_GNUC_PREREQ (3, 3)
-# define _GL_ATTR_nonstring _GL_GNUC_PREREQ (8, 0)
-# define _GL_ATTR_nothrow _GL_GNUC_PREREQ (3, 3)
-# define _GL_ATTR_packed _GL_GNUC_PREREQ (2, 7)
-# define _GL_ATTR_pure _GL_GNUC_PREREQ (2, 96)
-# define _GL_ATTR_returns_nonnull _GL_GNUC_PREREQ (4, 9)
-# define _GL_ATTR_sentinel _GL_GNUC_PREREQ (4, 0)
-# define _GL_ATTR_unused _GL_GNUC_PREREQ (2, 7)
-# define _GL_ATTR_warn_unused_result _GL_GNUC_PREREQ (3, 4)
-#endif
-
-#ifdef __has_c_attribute
-# if ((defined __STDC_VERSION__ ? __STDC_VERSION__ : 0) <= 201710 \
-      && _GL_GNUC_PREREQ (4, 6))
-#  pragma GCC diagnostic ignored "-Wpedantic"
-# endif
-# define _GL_HAS_C_ATTRIBUTE(attr) __has_c_attribute (__##attr##__)
-#else
-# define _GL_HAS_C_ATTRIBUTE(attr) 0
 #endif
 
 /* _GL_ATTRIBUTE_FORMAT ((ARCHETYPE, STRING-INDEX, FIRST-TO-CHECK))
@@ -194,37 +207,43 @@
    If FIRST-TO-CHECK is not 0, arguments starting at FIRST-TO_CHECK
    are suitable for the format string.  */
 /* Applies to: functions.  */
-#if _GL_HAS_ATTRIBUTE (format)
-# define _GL_ATTRIBUTE_FORMAT(spec) __attribute__ ((__format__ spec))
-#else
-# define _GL_ATTRIBUTE_FORMAT(spec)
+#ifndef _GL_ATTRIBUTE_FORMAT
+# if _GL_HAS_ATTRIBUTE (format)
+#  define _GL_ATTRIBUTE_FORMAT(spec) __attribute__ ((__format__ spec))
+# else
+#  define _GL_ATTRIBUTE_FORMAT(spec)
+# endif
 #endif
-
-/* _GL_ATTRIBUTE_MAYBE_UNUSED declares that it is not a programming mistake if
-   the entity is not used.  The compiler should not warn if the entity is not
-   used.  */
-/* Applies to:
-     - function, variable,
-     - struct, union, struct/union member,
-     - enumeration, enumeration item,
-     - typedef,
-   in C++ also: class.  */
-/* In C++ and C2x, this is spelled [[__maybe_unused__]].
-   GCC's syntax is __attribute__ ((__unused__)).
-   clang supports both syntaxes.  */
-#if _GL_HAS_C_ATTRIBUTE (maybe_unused)
-# define _GL_ATTRIBUTE_MAYBE_UNUSED [[__maybe_unused__]]
-#else
-# define _GL_ATTRIBUTE_MAYBE_UNUSED _GL_ATTRIBUTE_UNUSED
-#endif
-/* Alternative spelling of this macro, for convenience.  */
-#define _GL_UNUSED _GL_ATTRIBUTE_MAYBE_UNUSED
 
 /* A helper macro.  Don't use it directly.  */
-#if _GL_HAS_ATTRIBUTE (unused)
-# define _GL_ATTRIBUTE_UNUSED __attribute__ ((__unused__))
-#else
-# define _GL_ATTRIBUTE_UNUSED
+#ifndef _GL_ATTRIBUTE_UNUSED
+# if _GL_HAS_ATTRIBUTE (unused)
+#  define _GL_ATTRIBUTE_UNUSED __attribute__ ((__unused__))
+# else
+#  define _GL_ATTRIBUTE_UNUSED
+# endif
 #endif
+#define _GL_UNUSED _GL_ATTRIBUTE_UNUSED
+
+/* Printf format attribute specifiers for argp.h */
+/* __gnu_printf__ is supported in GCC >= 4.4 */
+#if (__GNUC__ + (__GNUC_MINOR__ >= 4) > 4) && !defined __clang__
+# define _GL_ATTRIBUTE_SPEC_PRINTF_STANDARD __gnu_printf__
+#else
+# define _GL_ATTRIBUTE_SPEC_PRINTF_STANDARD __printf__
+#endif
+
+/* For a public header, use system printf behavior */
+#define _GL_ATTRIBUTE_SPEC_PRINTF_SYSTEM __printf__
+
+/* Rename argp_parse to rpl_argp_parse to match Gnulib's internal config.h and
+   ensure that Gnulib's implementation is used instead of the system
+   implementation (like Glibc's argp_parse). This also prevents issues where
+   dynamic symbols take precedence over static library symbols during linking,
+   and ensures consistent behavior across different toolchains (particularly
+   with clang's ASAN which can intercept symbols). See
+   https://lists.gnu.org/archive/html/bug-gnulib/2023-12/msg00035.html and
+   glm4/argp.m4 for details. */
+#define argp_parse rpl_argp_parse
 
 #endif
