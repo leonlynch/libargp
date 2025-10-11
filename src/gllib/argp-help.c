@@ -1,5 +1,5 @@
 /* Hierarchical argument parsing help output
-   Copyright (C) 1995-2023 Free Software Foundation, Inc.
+   Copyright (C) 1995-2025 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Written by Miles Bader <miles@gnu.ai.mit.edu>.
 
@@ -165,7 +165,7 @@ fill_in_uparams (const struct argp_state *state)
   const char *var = getenv ("ARGP_HELP_FMT");
   struct uparams new_params = uparams;
 
-#define SKIPWS(p) do { while (isspace ((unsigned char) *p)) p++; } while (0);
+#define SKIPWS(p) do { while (isspace ((unsigned char) *p)) p++; } while (0)
 
   if (var)
     {
@@ -422,8 +422,8 @@ struct hol
 {
   /* An array of hol_entry's.  */
   struct hol_entry *entries;
-  /* The number of entries in this hol.  If this field is zero, the others
-     are undefined.  */
+  /* The number of entries in this hol.  If this field is zero, entries and
+     short_options are undefined.  */
   unsigned num_entries;
 
   /* A string containing all short options in this HOL.  Each entry contains
@@ -449,7 +449,7 @@ make_hol (const struct argp *argp, struct hol_cluster *cluster)
   assert (hol);
 
   hol->num_entries = 0;
-  hol->clusters = 0;
+  hol->clusters = NULL;
 
   if (opts)
     {
@@ -622,7 +622,7 @@ static char
 hol_entry_first_short (const struct hol_entry *entry)
 {
   return hol_entry_short_iterate (entry, until_short,
-                                  entry->argp->argp_domain, 0);
+                                  entry->argp->argp_domain, NULL);
 }
 
 /* Returns the first valid long option in ENTRY, or NULL if there is none.  */
@@ -634,7 +634,7 @@ hol_entry_first_long (const struct hol_entry *entry)
   for (opt = entry->opt, num = entry->num; num > 0; opt++, num--)
     if (opt->name && ovisible (opt))
       return opt->name;
-  return 0;
+  return NULL;
 }
 
 /* Returns the entry in HOL with the long option name NAME, or NULL if there is
@@ -642,24 +642,29 @@ hol_entry_first_long (const struct hol_entry *entry)
 static struct hol_entry *
 hol_find_entry (struct hol *hol, const char *name)
 {
-  struct hol_entry *entry = hol->entries;
   unsigned num_entries = hol->num_entries;
 
-  while (num_entries-- > 0)
+  if (num_entries > 0)
     {
-      const struct argp_option *opt = entry->opt;
-      unsigned num_opts = entry->num;
+      struct hol_entry *entry = hol->entries;
 
-      while (num_opts-- > 0)
-        if (opt->name && ovisible (opt) && strcmp (opt->name, name) == 0)
-          return entry;
-        else
-          opt++;
+      do
+        {
+          const struct argp_option *opt = entry->opt;
+          unsigned num_opts = entry->num;
 
-      entry++;
+          while (num_opts-- > 0)
+            if (opt->name && ovisible (opt) && strcmp (opt->name, name) == 0)
+              return entry;
+            else
+              opt++;
+
+          entry++;
+        }
+      while (--num_entries > 0);
     }
 
-  return 0;
+  return NULL;
 }
 
 /* If an entry with the long option NAME occurs in HOL, set its special
@@ -940,7 +945,7 @@ hol_append (struct hol *hol, struct hol *more)
   while (*cl_end)
     cl_end = &(*cl_end)->next;
   *cl_end = more->clusters;
-  more->clusters = 0;
+  more->clusters = NULL;
 
   /* Merge entries.  */
   if (more->num_entries > 0)
@@ -1312,7 +1317,7 @@ hol_entry_help (struct hol_entry *entry, const struct argp_state *state,
     {
       const char *tstr = real->doc ? dgettext (state == NULL ? NULL
                                                : state->root_argp->argp_domain,
-                                               real->doc) : 0;
+                                               real->doc) : NULL;
       const char *fstr = filter_doc (tstr, real->key, entry->argp, state);
       if (fstr && *fstr)
         {
@@ -1352,7 +1357,7 @@ hol_help (struct hol *hol, const struct argp_state *state,
 {
   unsigned num;
   struct hol_entry *entry;
-  struct hol_help_state hhstate = { 0, 0, 0 };
+  struct hol_help_state hhstate = { NULL, 0, 0 };
 
   for (entry = hol->entries, num = hol->num_entries; num > 0; entry++, num--)
     hol_entry_help (entry, state, stream, &hhstate);
@@ -1364,7 +1369,7 @@ hol_help (struct hol *hol, const struct argp_state *state,
 Mandatory or optional arguments to long options are also mandatory or \
 optional for any corresponding short options.");
       const char *fstr = filter_doc (tstr, ARGP_KEY_HELP_DUP_ARGS_NOTE,
-                                     state ? state->root_argp : 0, state);
+                                     state ? state->root_argp : NULL, state);
       if (fstr && *fstr)
         {
           __argp_fmtstream_putc (stream, '\n');
@@ -1474,7 +1479,7 @@ hol_usage (struct hol *hol, argp_fmtstream_t stream)
                                  entry->argp->argp_domain, &snao_end);
       if (snao_end > short_no_arg_opts)
         {
-          *snao_end++ = 0;
+          *snao_end++ = '\0';
           __argp_fmtstream_printf (stream, " [-%s]", short_no_arg_opts);
         }
 
@@ -1588,7 +1593,7 @@ argp_doc (const struct argp *argp, const struct argp_state *state,
 {
   const char *text;
   const char *inp_text;
-  void *input = 0;
+  void *input = NULL;
   int anything = 0;
   size_t inp_text_limit = 0;
   const char *doc = argp->doc ? dgettext (argp->argp_domain, argp->doc) : NULL;
@@ -1597,11 +1602,11 @@ argp_doc (const struct argp *argp, const struct argp_state *state,
   if (doc)
     {
       char *vt = strchr (doc, '\v');
-      inp_text = post ? (vt ? vt + 1 : 0) : doc;
+      inp_text = post ? (vt ? vt + 1 : NULL) : doc;
       inp_text_limit = (!post && vt) ? (vt - doc) : 0;
     }
   else
-    inp_text = 0;
+    inp_text = NULL;
 
   if (argp->help_filter)
     /* We have to filter the doc strings.  */
@@ -1643,7 +1648,7 @@ argp_doc (const struct argp *argp, const struct argp_state *state,
   if (post && argp->help_filter)
     /* Now see if we have to output a ARGP_KEY_HELP_EXTRA text.  */
     {
-      text = (*argp->help_filter) (ARGP_KEY_HELP_EXTRA, 0, input);
+      text = (*argp->help_filter) (ARGP_KEY_HELP_EXTRA, NULL, input);
       if (text)
         {
           if (anything || pre_blank)
@@ -1676,7 +1681,7 @@ _help (const struct argp *argp, const struct argp_state *state, FILE *stream,
        unsigned flags, char *name)
 {
   int anything = 0;             /* Whether we've output anything.  */
-  struct hol *hol = 0;
+  struct hol *hol = NULL;
   argp_fmtstream_t fs;
 
   if (! stream)
@@ -1700,7 +1705,7 @@ _help (const struct argp *argp, const struct argp_state *state, FILE *stream,
 
   if (flags & (ARGP_HELP_USAGE | ARGP_HELP_SHORT_USAGE | ARGP_HELP_LONG))
     {
-      hol = argp_hol (argp, 0);
+      hol = argp_hol (argp, NULL);
 
       /* If present, these options always come last.  */
       hol_set_group (hol, "help", -1);
@@ -1817,7 +1822,7 @@ Try '%s --help' or '%s --usage' for more information.\n"),
 void __argp_help (const struct argp *argp, FILE *stream,
                   unsigned flags, char *name)
 {
-  _help (argp, 0, stream, flags, name);
+  _help (argp, NULL, stream, flags, name);
 }
 #ifdef weak_alias
 weak_alias (__argp_help, argp_help)
@@ -1852,7 +1857,7 @@ __argp_state_help (const struct argp_state *state, FILE *stream, unsigned flags)
       if (state && (state->flags & ARGP_LONG_ONLY))
         flags |= ARGP_HELP_LONG_ONLY;
 
-      _help (state ? state->root_argp : 0, state, stream, flags,
+      _help (state ? state->root_argp : NULL, state, stream, flags,
              state ? state->name : __argp_short_program_name ());
 
       if (!state || ! (state->flags & ARGP_NO_EXIT))

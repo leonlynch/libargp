@@ -1,9 +1,12 @@
-# Check for alignas and alignof that conform to C23.
-
-dnl Copyright 2011-2023 Free Software Foundation, Inc.
+# stdalign.m4
+# serial 3
+dnl Copyright 2011-2025 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
+dnl This file is offered as-is, without any warranty.
+
+# Check for alignas and alignof that conform to C23.
 
 dnl Written by Paul Eggert and Bruno Haible.
 
@@ -13,10 +16,10 @@ AC_DEFUN([gl_ALIGNASOF],
 [
   AC_CACHE_CHECK([for alignas and alignof],
     [gl_cv_header_working_stdalign_h],
-    [gl_save_CFLAGS=$CFLAGS
+    [gl_saved_CFLAGS=$CFLAGS
      for gl_working in "yes, keywords" "yes, <stdalign.h> macros"; do
       AS_CASE([$gl_working],
-        [*stdalign.h*], [CFLAGS="$gl_save_CFLAGS -DINCLUDE_STDALIGN_H"])
+        [*stdalign.h*], [CFLAGS="$gl_saved_CFLAGS -DINCLUDE_STDALIGN_H"])
       AC_COMPILE_IFELSE(
        [AC_LANG_PROGRAM(
           [[#include <stdint.h>
@@ -56,7 +59,7 @@ AC_DEFUN([gl_ALIGNASOF],
        [gl_cv_header_working_stdalign_h=$gl_working],
        [gl_cv_header_working_stdalign_h=no])
 
-      CFLAGS=$gl_save_CFLAGS
+      CFLAGS=$gl_saved_CFLAGS
       test "$gl_cv_header_working_stdalign_h" != no && break
      done])
 
@@ -68,8 +71,10 @@ AC_DEFUN([gl_ALIGNASOF],
   dnl The "zz" puts this toward config.h's end, to avoid potential
   dnl collisions with other definitions.
   AH_VERBATIM([zzalignas],
-[#if !defined HAVE_C_ALIGNASOF && __cplusplus < 201103 && !defined alignof
-# if HAVE_STDALIGN_H
+[#if !defined HAVE_C_ALIGNASOF \
+    && !(defined __cplusplus && 201103 <= __cplusplus) \
+    && !defined alignof
+# if defined HAVE_STDALIGN_H
 #  include <stdalign.h>
 # endif
 
@@ -77,10 +82,10 @@ AC_DEFUN([gl_ALIGNASOF],
 
    References:
    ISO C23 (latest free draft
-   <http://www.open-std.org/jtc1/sc22/wg14/www/docs/n3047.pdf>)
+   <https://www.open-std.org/jtc1/sc22/wg14/www/docs/n3096.pdf>)
    sections 6.5.3.4, 6.7.5, 7.15.
    C++11 (latest free draft
-   <http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2011/n3242.pdf>)
+   <https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2011/n3242.pdf>)
    section 18.10. */
 
 /* alignof (TYPE), also known as _Alignof (TYPE), yields the alignment
@@ -99,18 +104,24 @@ AC_DEFUN([gl_ALIGNASOF],
 
 /* GCC releases before GCC 4.9 had a bug in _Alignof.  See GCC bug 52023
    <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52023>.
-   clang versions < 8.0.0 have the same bug.  */
+   clang versions < 8.0.0 have the same bug.
+   IBM XL C V16.1.0 cc (non-clang) has the same bug.  */
 #  if (!defined __STDC_VERSION__ || __STDC_VERSION__ < 201112 \
        || (defined __GNUC__ && __GNUC__ < 4 + (__GNUC_MINOR__ < 9) \
            && !defined __clang__) \
-       || (defined __clang__ && __clang_major__ < 8))
+       || (defined __clang__ && __clang_major__ < 8) \
+       || defined __xlC__)
 #   undef/**/_Alignof
 #   ifdef __cplusplus
 #    if (201103 <= __cplusplus || defined _MSC_VER)
 #     define _Alignof(type) alignof (type)
 #    else
       template <class __t> struct __alignof_helper { char __a; __t __b; };
-#     define _Alignof(type) offsetof (__alignof_helper<type>, __b)
+#     if (defined __GNUC__ && 4 <= __GNUC__) || defined __clang__
+#      define _Alignof(type) __builtin_offsetof (__alignof_helper<type>, __b)
+#     else
+#      define _Alignof(type) offsetof (__alignof_helper<type>, __b)
+#     endif
 #     define _GL_STDALIGN_NEEDS_STDDEF 1
 #    endif
 #   else
@@ -166,16 +177,17 @@ AC_DEFUN([gl_ALIGNASOF],
 #   define _Alignas(a) __declspec (align (a))
 #  endif
 # endif
-# if !HAVE_STDALIGN_H
+# if !defined HAVE_STDALIGN_H
 #  if ((defined _Alignas \
         && !(defined __cplusplus \
              && (201103 <= __cplusplus || defined _MSC_VER))) \
-       || (defined __STDC_VERSION__ && 201112 <= __STDC_VERSION__))
+       || (defined __STDC_VERSION__ && 201112 <= __STDC_VERSION__ \
+           && !defined __xlC__))
 #   define alignas _Alignas
 #  endif
 # endif
 
-# if _GL_STDALIGN_NEEDS_STDDEF
+# if defined _GL_STDALIGN_NEEDS_STDDEF
 #  include <stddef.h>
 # endif
 #endif])
