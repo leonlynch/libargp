@@ -1,9 +1,11 @@
-# mbrtowc.m4 serial 43  -*- coding: utf-8 -*-
-dnl Copyright (C) 2001-2002, 2004-2005, 2008-2023 Free Software Foundation,
+# mbrtowc.m4
+# serial 46
+dnl Copyright (C) 2001-2002, 2004-2005, 2008-2025 Free Software Foundation,
 dnl Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
+dnl This file is offered as-is, without any warranty.
 
 AC_DEFUN([gl_FUNC_MBRTOWC],
 [
@@ -91,7 +93,9 @@ AC_DEFUN([gl_FUNC_MBRTOWC],
   fi
   if test $REPLACE_MBSTATE_T = 1; then
     case "$host_os" in
-      mingw*) MBRTOWC_LIB= ;;
+      mingw* | windows*)
+        MBRTOWC_LIB=
+        ;;
       *)
         gl_WEAK_SYMBOLS
         case "$gl_cv_have_weak" in
@@ -129,7 +133,7 @@ AC_DEFUN_ONCE([gl_MBSTATE_T_BROKEN],
   dnl to override it, even if - like on MSVC - mbsinit() is only defined as
   dnl an inline function, not as a global function.
   if case "$host_os" in
-       mingw*) true ;;
+       mingw* | windows*) true ;;
        *) test $ac_cv_func_mbsinit = yes ;;
      esac \
     && test $ac_cv_func_mbrtowc = yes; then
@@ -157,7 +161,7 @@ AC_DEFUN([gl_MBRTOWC_INCOMPLETE_STATE],
 [
   AC_REQUIRE([AC_PROG_CC])
   AC_REQUIRE([gt_LOCALE_JA])
-  AC_REQUIRE([gt_LOCALE_FR_UTF8])
+  AC_REQUIRE([gt_LOCALE_EN_UTF8])
   AC_REQUIRE([AC_CANONICAL_HOST]) dnl for cross-compiles
   AC_CACHE_CHECK([whether mbrtowc handles incomplete characters],
     [gl_cv_func_mbrtowc_incomplete_state],
@@ -197,7 +201,7 @@ int main ()
           [gl_cv_func_mbrtowc_incomplete_state=no],
           [:])
       else
-        if test $LOCALE_FR_UTF8 != none; then
+        if test "$LOCALE_EN_UTF8" != none; then
           AC_RUN_IFELSE(
             [AC_LANG_SOURCE([[
 #include <locale.h>
@@ -205,7 +209,7 @@ int main ()
 #include <wchar.h>
 int main ()
 {
-  if (setlocale (LC_ALL, "$LOCALE_FR_UTF8") != NULL)
+  if (setlocale (LC_ALL, "$LOCALE_EN_UTF8") != NULL)
     {
       const char input[] = "B\303\274\303\237er"; /* "Büßer" */
       mbstate_t state;
@@ -285,7 +289,7 @@ dnl Result is gl_cv_func_mbrtowc_null_arg1.
 AC_DEFUN([gl_MBRTOWC_NULL_ARG1],
 [
   AC_REQUIRE([AC_PROG_CC])
-  AC_REQUIRE([gt_LOCALE_FR_UTF8])
+  AC_REQUIRE([gt_LOCALE_EN_UTF8])
   AC_REQUIRE([AC_CANONICAL_HOST]) dnl for cross-compiles
   AC_CACHE_CHECK([whether mbrtowc handles a NULL pwc argument],
     [gl_cv_func_mbrtowc_null_arg1],
@@ -300,7 +304,7 @@ changequote(,)dnl
         *)        gl_cv_func_mbrtowc_null_arg1="guessing yes" ;;
       esac
 changequote([,])dnl
-      if test $LOCALE_FR_UTF8 != none; then
+      if test "$LOCALE_EN_UTF8" != none; then
         AC_RUN_IFELSE(
           [AC_LANG_SOURCE([[
 #include <locale.h>
@@ -311,7 +315,7 @@ int main ()
 {
   int result = 0;
 
-  if (setlocale (LC_ALL, "$LOCALE_FR_UTF8") != NULL)
+  if (setlocale (LC_ALL, "$LOCALE_EN_UTF8") != NULL)
     {
       char input[] = "\303\237er";
       mbstate_t state;
@@ -348,7 +352,7 @@ dnl Result is gl_cv_func_mbrtowc_null_arg2.
 AC_DEFUN([gl_MBRTOWC_NULL_ARG2],
 [
   AC_REQUIRE([AC_PROG_CC])
-  AC_REQUIRE([gt_LOCALE_FR_UTF8])
+  AC_REQUIRE([gt_LOCALE_EN_UTF8])
   AC_REQUIRE([AC_CANONICAL_HOST]) dnl for cross-compiles
   AC_CACHE_CHECK([whether mbrtowc handles a NULL string argument],
     [gl_cv_func_mbrtowc_null_arg2],
@@ -363,7 +367,7 @@ changequote(,)dnl
         *)    gl_cv_func_mbrtowc_null_arg2="guessing yes" ;;
       esac
 changequote([,])dnl
-      if test $LOCALE_FR_UTF8 != none; then
+      if test "$LOCALE_EN_UTF8" != none; then
         AC_RUN_IFELSE(
           [AC_LANG_SOURCE([[
 #include <locale.h>
@@ -371,7 +375,7 @@ changequote([,])dnl
 #include <wchar.h>
 int main ()
 {
-  if (setlocale (LC_ALL, "$LOCALE_FR_UTF8") != NULL)
+  if (setlocale (LC_ALL, "$LOCALE_EN_UTF8") != NULL)
     {
       mbstate_t state;
       wchar_t wc;
@@ -401,7 +405,7 @@ dnl Result is gl_cv_func_mbrtowc_retval.
 AC_DEFUN([gl_MBRTOWC_RETVAL],
 [
   AC_REQUIRE([AC_PROG_CC])
-  AC_REQUIRE([gt_LOCALE_FR_UTF8])
+  AC_REQUIRE([gt_LOCALE_EN_UTF8])
   AC_REQUIRE([gt_LOCALE_JA])
   AC_REQUIRE([AC_CANONICAL_HOST])
   AC_CACHE_CHECK([whether mbrtowc has a correct return value],
@@ -411,14 +415,16 @@ AC_DEFUN([gl_MBRTOWC_RETVAL],
       dnl is present.
 changequote(,)dnl
       case "$host_os" in
-                                   # Guess no on HP-UX, Solaris, native Windows.
-        hpux* | solaris* | mingw*) gl_cv_func_mbrtowc_retval="guessing no" ;;
-                                   # Guess yes otherwise.
-        *)                         gl_cv_func_mbrtowc_retval="guessing yes" ;;
+          # Guess no on HP-UX, Solaris, native Windows.
+        hpux* | solaris* | mingw* | windows*)
+          gl_cv_func_mbrtowc_retval="guessing no" ;;
+          # Guess yes otherwise.
+        *)
+          gl_cv_func_mbrtowc_retval="guessing yes" ;;
       esac
 changequote([,])dnl
-      if test $LOCALE_FR_UTF8 != none || test $LOCALE_JA != none \
-         || { case "$host_os" in mingw*) true;; *) false;; esac; }; then
+      if test "$LOCALE_EN_UTF8" != none || test $LOCALE_JA != none \
+         || { case "$host_os" in mingw* | windows*) true;; *) false;; esac; }; then
         AC_RUN_IFELSE(
           [AC_LANG_SOURCE([[
 #include <locale.h>
@@ -429,8 +435,8 @@ int main ()
   int result = 0;
   int found_some_locale = 0;
   /* This fails on Solaris.  */
-  if (strcmp ("$LOCALE_FR_UTF8", "none") != 0
-      && setlocale (LC_ALL, "$LOCALE_FR_UTF8") != NULL)
+  if (strcmp ("$LOCALE_EN_UTF8", "none") != 0
+      && setlocale (LC_ALL, "$LOCALE_EN_UTF8") != NULL)
     {
       char input[] = "B\303\274\303\237er"; /* "Büßer" */
       mbstate_t state;
@@ -582,13 +588,13 @@ AC_DEFUN([gl_MBRTOWC_STORES_INCOMPLETE],
      dnl is present.
 changequote(,)dnl
      case "$host_os" in
-               # Guess yes on native Windows.
-       mingw*) gl_cv_func_mbrtowc_stores_incomplete="guessing yes" ;;
-       *)      gl_cv_func_mbrtowc_stores_incomplete="guessing no" ;;
+                          # Guess yes on native Windows.
+       mingw* | windows*) gl_cv_func_mbrtowc_stores_incomplete="guessing yes" ;;
+       *)                 gl_cv_func_mbrtowc_stores_incomplete="guessing no" ;;
      esac
 changequote([,])dnl
      case "$host_os" in
-       mingw*)
+       mingw* | windows*)
          AC_RUN_IFELSE(
            [AC_LANG_SOURCE([[
 #include <locale.h>
@@ -644,8 +650,8 @@ int main ()
            [:])
          ;;
        *)
-         AC_REQUIRE([gt_LOCALE_FR_UTF8])
-         if test $LOCALE_FR_UTF8 != none; then
+         AC_REQUIRE([gt_LOCALE_EN_UTF8])
+         if test "$LOCALE_EN_UTF8" != none; then
            AC_RUN_IFELSE(
              [AC_LANG_SOURCE([[
 #include <locale.h>
@@ -653,7 +659,7 @@ int main ()
 #include <wchar.h>
 int main ()
 {
-  if (setlocale (LC_ALL, "$LOCALE_FR_UTF8") != NULL)
+  if (setlocale (LC_ALL, "$LOCALE_EN_UTF8") != NULL)
     {
       wchar_t wc = (wchar_t) 0xBADFACE;
       mbstate_t state;
@@ -700,7 +706,7 @@ AC_DEFUN([gl_MBRTOWC_EMPTY_INPUT],
                                 # Guess no on Android.
           linux*-android*)      gl_cv_func_mbrtowc_empty_input="guessing no" ;;
                                 # Guess no on native Windows.
-          mingw*)               gl_cv_func_mbrtowc_empty_input="guessing no" ;;
+          mingw* | windows*)    gl_cv_func_mbrtowc_empty_input="guessing no" ;;
           *)                    gl_cv_func_mbrtowc_empty_input="guessing yes" ;;
         esac
        ])
@@ -745,9 +751,9 @@ AC_DEFUN([gl_MBRTOWC_C_LOCALE],
        [gl_cv_func_mbrtowc_C_locale_sans_EILSEQ=yes],
        [gl_cv_func_mbrtowc_C_locale_sans_EILSEQ=no],
        [case "$host_os" in
-                  # Guess yes on native Windows.
-          mingw*) gl_cv_func_mbrtowc_C_locale_sans_EILSEQ="guessing yes" ;;
-          *)      gl_cv_func_mbrtowc_C_locale_sans_EILSEQ="$gl_cross_guess_normal" ;;
+                             # Guess yes on native Windows.
+          mingw* | windows*) gl_cv_func_mbrtowc_C_locale_sans_EILSEQ="guessing yes" ;;
+          *)                 gl_cv_func_mbrtowc_C_locale_sans_EILSEQ="$gl_cross_guess_normal" ;;
         esac
        ])
     ])
