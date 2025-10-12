@@ -7,7 +7,10 @@
 
 name: Ubuntu build
 
-on: [push]
+on:
+  push:
+  schedule:
+    - cron: '0 0 15 * *'
 
 jobs:
   build-ubuntu:

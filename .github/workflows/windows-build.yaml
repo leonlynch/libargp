@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright 2022, 2024 Leon Lynch
+# Copyright 2022, 2024-2025 Leon Lynch
 #
 # This file is licensed under the terms of the LGPL v2.1 license.
 # See LICENSE file.
@@ -7,7 +7,10 @@
 
 name: Windows build
 
-on: [push]
+on:
+  push:
+  schedule:
+    - cron: '0 0 15 * *'
 
 jobs:
   build-windows-msys2-debug:
@@ -52,7 +55,7 @@ jobs:
     - name: Configure Git
       run: |
         git config --global core.autocrlf true
-        git describe --always --dirty
+        echo "GIT_DESCRIBE=$(git describe --always --dirty)" >> $GITHUB_ENV
 
     - name: Configure CMake
       run: cmake -G Ninja -B build -DCMAKE_BUILD_TYPE="${{ matrix.build_type }}"
@@ -62,3 +65,11 @@ jobs:
 
     - name: Test
       run: cmake --build build --target test
+
+    - name: Upload build directory if failed
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: libargp-${{ env.GIT_DESCRIBE }}-windows-build
+        path: ./
+        if-no-files-found: error
