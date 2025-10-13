@@ -21,6 +21,10 @@
 #ifndef ARGP_CONFIG_H
 #define ARGP_CONFIG_H
 
+/* Sentinel to identify this config as being part of the standalone libargp
+   project, and not part of Glibc or Gnulib. */
+#define LIBARGP_STANDALONE_CONFIG
+
 /* Please see the Gnulib manual for how to use these macros.
 
    Suppress extern inline with HP-UX cc, as it appears to be broken; see

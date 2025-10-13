@@ -19,7 +19,11 @@
  */
 
 #include <string.h>
-#include <argp.h>
+#include "argp.h"
+
+#ifndef LIBARGP_STANDALONE_CONFIG
+#error "Incorrect argp.h - this project's argp-config.h defines LIBARGP_STANDALONE_CONFIG"
+#endif
 
 // Command line options
 struct cmdline_options_t {
