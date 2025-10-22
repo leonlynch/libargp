@@ -237,8 +237,12 @@
 # define _GL_ATTRIBUTE_SPEC_PRINTF_STANDARD __printf__
 #endif
 
-/* For a public header, use system printf behavior */
-#define _GL_ATTRIBUTE_SPEC_PRINTF_SYSTEM __printf__
+/* For MinGW, use GNU format attribute for C99 format specifiers */
+#if defined __MINGW32__
+# define _GL_ATTRIBUTE_SPEC_PRINTF_SYSTEM __gnu_printf__
+#else
+# define _GL_ATTRIBUTE_SPEC_PRINTF_SYSTEM __printf__
+#endif
 
 /* Rename argp_parse to rpl_argp_parse to match Gnulib's internal config.h and
    ensure that Gnulib's implementation is used instead of the system
