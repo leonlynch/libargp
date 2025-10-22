@@ -36,6 +36,7 @@ static error_t argp_parser_helper(int key, char* arg, struct argp_state* state);
 // argp option structure
 static struct argp_option argp_options[] = {
 	{ "foobob", 1, NULL, 0, "Do foobob" },
+	{ "test-format", 2, NULL, 0, "Test argp_error() format attribute with %zu" },
 	{ 0 },
 };
 
@@ -63,6 +64,14 @@ static error_t argp_parser_helper(int key, char* arg, struct argp_state* state)
 		case 1:
 			options->foobob = 1;
 			return 0;
+
+		case 2: {
+			// Test argp_error() with %zu format specifier to ensure that the
+			// compiler allows C99 format specifiers. This mostly tests MinGW.
+			size_t x = 12345;
+			argp_error(state, "Test argp_error format specifiers: x=%zu", x);
+			return 0;
+		}
 
 		case ARGP_KEY_END: {
 			return 0;

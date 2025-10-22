@@ -141,10 +141,23 @@ if(LIBARGP_IS_TOP_LEVEL)
 	# Simple compile test
 	add_executable(test1 test/test1.c)
 	target_link_libraries(test1 libargp::argp)
-	add_test(NAME test1
-		COMMAND test1 --help)
-	set_tests_properties(test1
+
+	# Test usage/help output
+	add_test(NAME test1-help
+		COMMAND test1 --help
+	)
+	set_tests_properties(test1-help
 		PROPERTIES
 			PASS_REGULAR_EXPRESSION "^Usage\:"
+	)
+
+	# Test argp_error() with %zu format specifier to ensure that the
+	# compiler allows C99 format specifiers. This mostly tests MinGW.
+	add_test(NAME test1-format
+		COMMAND test1 --test-format
+	)
+	set_tests_properties(test1-format
+		PROPERTIES
+			PASS_REGULAR_EXPRESSION "^test1.*: Test argp_error format specifiers: x=12345\n"
 	)
 endif()
