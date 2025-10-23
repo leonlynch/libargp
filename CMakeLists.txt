@@ -18,7 +18,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(libargp
-	VERSION 0.2
+	VERSION 0.2.1
 	DESCRIPTION "Hierarchical processing of command line arguments"
 	LANGUAGES C
 )
