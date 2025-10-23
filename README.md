@@ -1,7 +1,7 @@
 libargp (Gnulib)
 ================
 
-[![License: LGPL-2.1](https://img.shields.io/github/license/leonlynch/libargp)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html)<br/>
+[![License: LGPL-3.0](https://img.shields.io/github/license/leonlynch/libargp)](https://spdx.org/licenses/LGPL-3.0-or-later.html)<br/>
 [![Ubuntu build](https://github.com/leonlynch/libargp/actions/workflows/ubuntu-build.yaml/badge.svg)](https://github.com/leonlynch/libargp/actions/workflows/ubuntu-build.yaml)<br/>
 [![MacOS build](https://github.com/leonlynch/libargp/actions/workflows/macos-build.yaml/badge.svg)](https://github.com/leonlynch/libargp/actions/workflows/macos-build.yaml)<br/>
 [![Windows build](https://github.com/leonlynch/libargp/actions/workflows/windows-build.yaml/badge.svg)](https://github.com/leonlynch/libargp/actions/workflows/windows-build.yaml)<br/>
@@ -49,9 +49,10 @@ License
 
 [Gnulib](https://www.gnu.org/software/gnulib/) is copyright
 [Free Software Foundation](https://www.fsf.org/) and this project extracts
-`libargp` under the LGPL v3 license.
+`libargp` under the LGPL v3 or later license.
 
 Helpers in this project are copyright 2022-2025 [Leon Lynch](https://github.com/leonlynch).
 
-This project itself is also licensed under the terms of the LGPL v3 license.
+This project itself is also licensed under the terms of the LGPL v3 or later
+license.
 See [LICENSE](https://github.com/leonlynch/libargp/blob/master/LICENSE) file.
